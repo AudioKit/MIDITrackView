@@ -1,4 +1,4 @@
-// Copyright AudioKit. All Rights Reserved. Revision History at http://github.com/AudioKit/PianoRoll/
+// Copyright AudioKit. All Rights Reserved. Revision History at http://github.com/AudioKit/MIDITrackView/
 
 import SwiftUI
 
