@@ -3,26 +3,31 @@
 import SwiftUI
 
 public struct MIDITrackView: View {
+    @Binding var model: MIDITrackViewModel
+    var trackColor = Color.primary
+    var noteColor = Color.accentColor
 
-    public init() {}
+    public init(model: Binding<MIDITrackViewModel>,
+                trackColor: Color = .primary,
+                noteColor: Color = .accentColor) {
+        _model = model
+        self.trackColor = trackColor
+        self.noteColor = noteColor
+    }
 
     public var body: some View {
         VStack {
             ZStack {
-                // Where a model will come in handy...
-                Note(notePosition: 80, noteLevel: 5, noteLength: 102, noteHeight: 5)
-                Note(notePosition: 103, noteLevel: 23, noteLength: 75, noteHeight: 5)
-                Note(notePosition: 157, noteLevel: 36, noteLength: 25, noteHeight: 5)
-                Note(notePosition: 208, noteLevel: 5, noteLength: 102, noteHeight: 5)
-                Note(notePosition: 301, noteLevel: 23, noteLength: 75, noteHeight: 5)
-                Note(notePosition: 376, noteLevel: 36, noteLength: 25, noteHeight: 5)
-                Note(notePosition: 402, noteLevel: 5, noteLength: 102, noteHeight: 5)
-                Note(notePosition: 450, noteLevel: 23, noteLength: 75, noteHeight: 5)
-                Note(notePosition: 500, noteLevel: 36, noteLength: 25, noteHeight: 5)
+                ForEach(model.midiNotes) { midiNote in
+                    MIDINoteView(
+                        midiNote: $model.midiNotes[model.midiNotes.firstIndex(of: midiNote)!],
+                        color: noteColor
+                    )
+                }
             }
         }
-        .frame(width: 500, height: 200, alignment: .center)
-        .background(Color.cyan)
+        .frame(width: model.length, height: model.height, alignment: .center)
+        .background(trackColor)
         .cornerRadius(10.0)
     }
 }
