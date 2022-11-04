@@ -7,9 +7,14 @@ public struct MIDINoteView: View {
     var color: Color
 
     public var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .foregroundColor(color)
-            .frame(width: midiNote.length, height: midiNote.height)
-            .position(x: midiNote.position, y: midiNote.level)
+        let noteRect = CGRect(x: midiNote.position,
+                          y: midiNote.level,
+                          width: midiNote.length,
+                          height: midiNote.height)
+        let notePath = Path(roundedRect: noteRect, cornerRadius: 10)
+
+        Canvas { context, size in
+            context.fill(notePath, with: .color(color))
+        }
     }
 }
