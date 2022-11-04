@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "60D332592915C6B300EAD0D7"
-               BuildableName = "MIDITrackViewDemo (macOS).app"
+               BuildableName = "MIDITrackViewDemo.app"
                BlueprintName = "MIDITrackViewDemo (macOS)"
                ReferencedContainer = "container:MIDITrackViewDemo.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "60D332592915C6B300EAD0D7"
-            BuildableName = "MIDITrackViewDemo (macOS).app"
+            BuildableName = "MIDITrackViewDemo.app"
             BlueprintName = "MIDITrackViewDemo (macOS)"
             ReferencedContainer = "container:MIDITrackViewDemo.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "60D332592915C6B300EAD0D7"
-            BuildableName = "MIDITrackViewDemo (macOS).app"
+            BuildableName = "MIDITrackViewDemo.app"
             BlueprintName = "MIDITrackViewDemo (macOS)"
             ReferencedContainer = "container:MIDITrackViewDemo.xcodeproj">
          </BuildableReference>
