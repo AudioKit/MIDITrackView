@@ -10,6 +10,6 @@ This ``MIDITrackView`` provides a similar user interface to one you might see in
 
 ## Topics
 
-### <!--@START_MENU_TOKEN@-->Group<!--@END_MENU_TOKEN@-->
+### Properties
 
-- <!--@START_MENU_TOKEN@-->``Symbol``<!--@END_MENU_TOKEN@-->
+- ``MIDITrackView/MIDITrackView/zoomLevel``
