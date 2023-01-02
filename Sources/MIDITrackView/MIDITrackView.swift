@@ -2,9 +2,13 @@
 
 import SwiftUI
 
+/// A view representing a MIDI Track.
 public struct MIDITrackView: View {
+    /// The view model.
     @Binding var model: MIDITrackViewModel
+    /// The track background color.
     var trackColor = Color.primary
+    /// The color of the notes on the track.
     var noteColor = Color.accentColor
 
     public init(model: Binding<MIDITrackViewModel>,
