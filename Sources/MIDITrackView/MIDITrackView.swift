@@ -33,27 +33,29 @@ public struct MIDITrackView: View {
     }
 
     public var body: some View {
-        VStack {
-            ZStack {
-                ForEach(model.midiNotes) { midiNote in
-                    MIDINoteView(
-                        midiNote: $model.midiNotes[model.midiNotes.firstIndex(of: midiNote)!],
-                        color: noteColor
-                    )
+        ScrollView(.horizontal, showsIndicators: true) {
+            VStack {
+                ZStack {
+                    ForEach(model.midiNotes) { midiNote in
+                        MIDINoteView(
+                            midiNote: $model.midiNotes[model.midiNotes.firstIndex(of: midiNote)!],
+                            zoomMultiplier: $zoomLevel,
+                            color: noteColor
+                        )
+                    }
                 }
             }
+            .gesture(MagnificationGesture().onChanged { val in
+                let delta = val / self.lastZoomLevel
+                self.lastZoomLevel = val
+                let newScale = self.zoomLevel * delta
+                zoomLevel = max(min(newScale, 5.0), 0.1)
+            }.onEnded { val in
+              self.lastZoomLevel = 1.0
+            })
+            .frame(width: model.length * zoomLevel, height: model.height, alignment: .center)
+            .background(trackColor)
+            .cornerRadius(10.0)
         }
-        .gesture(MagnificationGesture().onChanged { val in
-            let delta = val / self.lastZoomLevel
-            self.lastZoomLevel = val
-            let newScale = self.zoomLevel * delta
-            zoomLevel = max(min(newScale, 5.0), 0.1)
-        }.onEnded { val in
-          self.lastZoomLevel = 1.0
-        })
-        .frame(width: model.length, height: model.height, alignment: .center)
-        .background(trackColor)
-        .cornerRadius(10.0)
-        .scaleEffect(x: zoomLevel, y: 1.0)
     }
 }
