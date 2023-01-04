@@ -16,12 +16,12 @@ struct MIDITrackViewDemo: View {
             MIDINote(position: 450, level: 23, length: 75, height: 5),
             MIDINote(position: 500, level: 36, length: 25, height: 5)
         ],
-        length: 500,
+        length: 606,
         height: 200
     )
     public var body: some View {
         VStack {
-            MIDITrackView(model: $model, trackColor: Color.cyan, noteColor: Color.blue)
+            MIDITrackView(model: $model, trackColor: Color.cyan, noteColor: Color.blue, note: RoundedRectangle(cornerRadius: 10.0))
         }
     }
 }

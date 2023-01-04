@@ -3,7 +3,7 @@
 import SwiftUI
 
 /// A view representing a MIDI Track.
-public struct MIDITrackView: View {
+public struct MIDITrackView<Note: View>: View {
     /// The view model.
     @Binding var model: MIDITrackViewModel
 
@@ -24,36 +24,53 @@ public struct MIDITrackView: View {
     /// The color of the notes on the track.
     var noteColor = Color.accentColor
 
+    /// The view used in a note display.
+    ///
+    /// # Description:
+    /// This is what each note on the track will show up as.
+    public let note: Note
+
     public init(model: Binding<MIDITrackViewModel>,
                 trackColor: Color = .primary,
-                noteColor: Color = .accentColor) {
+                noteColor: Color = .accentColor,
+                note: Note) {
         _model = model
         self.trackColor = trackColor
         self.noteColor = noteColor
+        self.note = note
+    }
+
+    enum SymbolID: Int {
+        case note
     }
 
     public var body: some View {
-        ScrollView(.horizontal, showsIndicators: true) {
-            VStack {
-                ZStack {
-                    ForEach(model.midiNotes) { midiNote in
-                        MIDINoteView(
-                            midiNote: $model.midiNotes[model.midiNotes.firstIndex(of: midiNote)!],
-                            zoomMultiplier: $zoomLevel,
-                            color: noteColor
-                        )
+        ScrollView(.horizontal,
+                   showsIndicators: true) {
+            Canvas { context, size in
+                if let note = context.resolveSymbol(id: SymbolID.note) {
+                    for midiNote in model.midiNotes {
+                        let rect = midiNote.rect
+                        context.draw(note, in: rect)
                     }
                 }
+            } symbols: {
+                note.tag(SymbolID.note)
             }
+            .frame(width: model.length * zoomLevel,
+                   height: model.height,
+                   alignment: .center)
+            .scaleEffect(x: zoomLevel,
+                         y: 1.0,
+                         anchor: .leading)
             .gesture(MagnificationGesture().onChanged { val in
                 let delta = val / self.lastZoomLevel
                 self.lastZoomLevel = val
                 let newScale = self.zoomLevel * delta
-                zoomLevel = max(min(newScale, 5.0), 0.1)
+                zoomLevel = max(min(newScale, 5.0), 1.0)
             }.onEnded { val in
               self.lastZoomLevel = 1.0
             })
-            .frame(width: model.length * zoomLevel, height: model.height, alignment: .center)
             .background(trackColor)
             .cornerRadius(10.0)
         }

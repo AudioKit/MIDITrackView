@@ -13,3 +13,4 @@ This ``MIDITrackView`` provides a similar user interface to one you might see in
 ### Properties
 
 - ``MIDITrackView/MIDITrackView/zoomLevel``
+- ``MIDITrackView/MIDITrackView/note``
