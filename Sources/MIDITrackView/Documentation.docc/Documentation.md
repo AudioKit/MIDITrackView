@@ -11,6 +11,9 @@ This ``MIDITrackView`` provides a similar user interface to one you might see in
 ## Topics
 
 ### Properties
-
 - ``MIDITrackView/MIDITrackView/zoomLevel``
 - ``MIDITrackView/MIDITrackView/note``
+
+### Related Types
+- ``MIDITrackViewModel``
+- ``MIDINote``

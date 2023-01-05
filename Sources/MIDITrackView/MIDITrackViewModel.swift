@@ -9,7 +9,10 @@ public struct MIDITrackViewModel: Equatable {
         self.height = height
     }
 
-    var midiNotes: [MIDINote]
-    var length: CGFloat
-    var height: CGFloat
+    /// The notes rendered in the view.
+    public var midiNotes: [MIDINote]
+    /// The length of the track.
+    public var length: CGFloat
+    /// The height of the track.
+    public var height: CGFloat
 }
