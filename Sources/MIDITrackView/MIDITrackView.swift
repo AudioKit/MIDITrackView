@@ -48,6 +48,7 @@ public struct MIDITrackView<Note: View>: View {
         ScrollView(.horizontal,
                    showsIndicators: true) {
             Canvas { context, size in
+                context.scaleBy(x: zoomLevel, y: 1.0)
                 if let note = context.resolveSymbol(id: SymbolID.note) {
                     for midiNote in model.midiNotes {
                         let rect = midiNote.rect
@@ -60,19 +61,17 @@ public struct MIDITrackView<Note: View>: View {
             .frame(width: model.length * zoomLevel,
                    height: model.height,
                    alignment: .center)
-            .scaleEffect(x: zoomLevel,
-                         y: 1.0,
-                         anchor: .leading)
-            .gesture(MagnificationGesture().onChanged { val in
-                let delta = val / self.lastZoomLevel
-                self.lastZoomLevel = val
-                let newScale = self.zoomLevel * delta
-                zoomLevel = max(min(newScale, 5.0), 1.0)
-            }.onEnded { val in
-              self.lastZoomLevel = 1.0
-            })
             .background(trackColor)
             .cornerRadius(10.0)
         }
+        .gesture(MagnificationGesture().onChanged { val in
+            let delta = val / self.lastZoomLevel
+            self.lastZoomLevel = val
+            let newScale = self.zoomLevel * delta
+            zoomLevel = max(min(newScale, 5.0), 1.0)
+
+        }.onEnded { val in
+            self.lastZoomLevel = 1.0
+        })
     }
 }
