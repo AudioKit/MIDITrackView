@@ -10,8 +10,8 @@ public struct MIDITrackView<Note: View>: View {
     /// The view zoom level.
     ///
     /// # Description:
-    /// This property controls the zoom level of this view. Use the "pinch and drag" gesture on your device screen/trackpad
-    /// to adjust the zoom level accordingly. <**Insert instructions for desktop user here**>.
+    /// This property controls the zoom level of this view. Use the "pinch and drag" gesture on a device screen/trackpad
+    /// to adjust the zoom level accordingly. If using a mouse, rotate the scroll wheel to do the same thing.
     ///
     /// ### Important values:
     /// __Default:__ 1.0, __Minimum:__ 0.1, __Maximum:__ 5.0.
@@ -68,10 +68,21 @@ public struct MIDITrackView<Note: View>: View {
             let delta = val / self.lastZoomLevel
             self.lastZoomLevel = val
             let newScale = self.zoomLevel * delta
-            zoomLevel = max(min(newScale, 5.0), 1.0)
+            zoomLevel = max(min(newScale, 5.0), 0.1)
 
         }.onEnded { val in
             self.lastZoomLevel = 1.0
         })
+        .onAppear {
+            #if os(macOS)
+            NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { event in
+                let rot = event.deltaY
+                let delta = rot > 0 ? (1 - rot / 100) : 1.0/(1 + rot/100)
+                let newScale = self.zoomLevel * delta
+                zoomLevel = max(min(newScale, 5.0), 0.1)
+                return event
+            }
+            #endif
+        }
     }
 }
