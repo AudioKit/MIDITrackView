@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60C33E8E296A947C0066D196 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60C33E8D296A947C0066D196 /* MIDIKitSMF */; };
+		60C33E90296A95B70066D196 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60C33E8F296A95B70066D196 /* MIDIKitSMF */; };
+		60C33E92296AA0C60066D196 /* Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60C33E91296AA0C60066D196 /* Demo.mid */; };
+		60C33E93296AA0C60066D196 /* Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60C33E91296AA0C60066D196 /* Demo.mid */; };
 		60D3325E2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */; };
 		60D332602915C6B300EAD0D7 /* MIDITrackViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D3325F2915C6B300EAD0D7 /* MIDITrackViewDemo.swift */; };
 		60D332622915C6B400EAD0D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60D332612915C6B400EAD0D7 /* Assets.xcassets */; };
@@ -18,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		60C33E91296AA0C60066D196 /* Demo.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = Demo.mid; sourceTree = "<group>"; };
 		60D3325A2915C6B300EAD0D7 /* MIDITrackViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDITrackViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDITrackViewDemoApp.swift; sourceTree = "<group>"; };
 		60D3325F2915C6B300EAD0D7 /* MIDITrackViewDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDITrackViewDemo.swift; sourceTree = "<group>"; };
@@ -33,6 +38,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60D332702915C77A00EAD0D7 /* MIDITrackView in Frameworks */,
+				60C33E90296A95B70066D196 /* MIDIKitSMF in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60D332852915C9E000EAD0D7 /* MIDITrackView in Frameworks */,
+				60C33E8E296A947C0066D196 /* MIDIKitSMF in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +77,7 @@
 		60D3325C2915C6B300EAD0D7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				60C33E91296AA0C60066D196 /* Demo.mid */,
 				60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */,
 				60D3325F2915C6B300EAD0D7 /* MIDITrackViewDemo.swift */,
 				60D332612915C6B400EAD0D7 /* Assets.xcassets */,
@@ -118,6 +126,7 @@
 			name = "MIDITrackViewDemo (macOS)";
 			packageProductDependencies = (
 				60D3326F2915C77A00EAD0D7 /* MIDITrackView */,
+				60C33E8F296A95B70066D196 /* MIDIKitSMF */,
 			);
 			productName = MIDITrackViewDemo;
 			productReference = 60D3325A2915C6B300EAD0D7 /* MIDITrackViewDemo.app */;
@@ -138,6 +147,7 @@
 			name = "MIDITrackViewDemo (iOS)";
 			packageProductDependencies = (
 				60D332842915C9E000EAD0D7 /* MIDITrackView */,
+				60C33E8D296A947C0066D196 /* MIDIKitSMF */,
 			);
 			productName = "MIDITrackViewDemo (iOS)";
 			productReference = 60D332762915C99C00EAD0D7 /* MIDITrackViewDemo.app */;
@@ -170,6 +180,9 @@
 				Base,
 			);
 			mainGroup = 60D332512915C6B300EAD0D7;
+			packageReferences = (
+				60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */,
+			);
 			productRefGroup = 60D3325B2915C6B300EAD0D7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -186,6 +199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60D332622915C6B400EAD0D7 /* Assets.xcassets in Resources */,
+				60C33E93296AA0C60066D196 /* Demo.mid in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60D332882915CAA300EAD0D7 /* Assets.xcassets in Resources */,
+				60C33E92296AA0C60066D196 /* Demo.mid in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,7 +518,28 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				kind = exactVersion;
+				version = 0.7.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		60C33E8D296A947C0066D196 /* MIDIKitSMF */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			productName = MIDIKitSMF;
+		};
+		60C33E8F296A95B70066D196 /* MIDIKitSMF */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			productName = MIDIKitSMF;
+		};
 		60D3326F2915C77A00EAD0D7 /* MIDITrackView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDITrackView;
