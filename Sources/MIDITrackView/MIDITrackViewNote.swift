@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-public struct MIDINote: Equatable, Identifiable {
+public struct MIDITrackViewNote: Equatable, Identifiable {
     /// Unique identifier (for use in the model).
     public var id = UUID()
     /// The note rectangle (for use in rendering).

@@ -3,14 +3,14 @@
 import SwiftUI
 
 public struct MIDITrackViewModel: Equatable {
-    public init(midiNotes: [MIDINote], length: CGFloat, height: CGFloat) {
+    public init(midiNotes: [MIDITrackViewNote], length: CGFloat, height: CGFloat) {
         self.midiNotes = midiNotes
         self.length = length
         self.height = height
     }
 
     /// The notes rendered in the view.
-    public var midiNotes: [MIDINote]
+    public var midiNotes: [MIDITrackViewNote]
     /// The length of the track.
     public var length: CGFloat
     /// The height of the track.
