@@ -6,10 +6,10 @@ import MIDITrackView
 struct MIDITrackViewDemo: View {
     @State var model: MIDITrackViewModel
 
-    public init(midiNotes: [MIDITrackViewNote] = [], height: CGFloat = 0.0) {
+    public init(midiNotes: [MIDITrackViewNote] = [], length: CGFloat = 0.0, height: CGFloat = 0.0) {
         self.model = MIDITrackViewModel(
             midiNotes: midiNotes,
-            length: 10000,
+            length: length,
             height: height
         )
     }

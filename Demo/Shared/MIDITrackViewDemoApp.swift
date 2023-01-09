@@ -7,6 +7,7 @@ import MIDITrackView
 class MIDITrackData {
     var midiNotes: [MIDITrackViewNote]!
     var height: CGFloat = 200.0
+    var length: CGFloat = 0.0
     init() {
         let url = Bundle.main.url(forResource: "Demo", withExtension: "mid")!
         let midiFile = try! MIDIFile(midiFile: url)
@@ -77,6 +78,7 @@ class MIDITrackData {
             i += 1
         }
         self.midiNotes = midiNotes
+        length = CGFloat(noteEventPositions[i - 1] + noteEventLengths[i - 1])
     }
 }
 
@@ -85,7 +87,7 @@ struct MIDITrackViewDemoApp: App {
     let midiTrackData = MIDITrackData()
     var body: some Scene {
         WindowGroup {
-            MIDITrackViewDemo(midiNotes: midiTrackData.midiNotes, height: midiTrackData.height)
+            MIDITrackViewDemo(midiNotes: midiTrackData.midiNotes, length: midiTrackData.length, height: midiTrackData.height)
         }
     }
 }
