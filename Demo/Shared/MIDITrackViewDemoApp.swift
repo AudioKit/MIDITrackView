@@ -4,10 +4,11 @@ import SwiftUI
 import MIDIKitSMF
 import MIDITrackView
 
-class MIDINoteData {
+class MIDITrackData {
     var midiNotes: [MIDITrackViewNote]!
+    var height: CGFloat = 200.0
     init() {
-        let url = Bundle.main.url(forResource: "Demo", withExtension: "mid")! // replace with url to a MIDI file on disk
+        let url = Bundle.main.url(forResource: "Demo", withExtension: "mid")!
         let midiFile = try! MIDIFile(midiFile: url)
 
         guard case .track(let track) = midiFile.chunks[1] else { return }
@@ -47,8 +48,8 @@ class MIDINoteData {
                 highNote = (noteOnEvent.note.number > highNote) ? noteOnEvent.note.number : highNote
                 lowNote = (noteOnEvent.note.number < lowNote) ? noteOnEvent.note.number : lowNote
                 noteRange = highNote - lowNote
-                noteHeight = 200.0 / CGFloat(noteRange)
-                maxHeight = 200.0 - noteHeight
+                noteHeight = self.height / CGFloat(noteRange)
+                maxHeight = self.height - noteHeight
 
                 i += 1
             default:
@@ -81,10 +82,10 @@ class MIDINoteData {
 
 @main
 struct MIDITrackViewDemoApp: App {
-    let midiNoteData = MIDINoteData()
+    let midiTrackData = MIDITrackData()
     var body: some Scene {
         WindowGroup {
-            MIDITrackViewDemo(midiNotes: midiNoteData.midiNotes)
+            MIDITrackViewDemo(midiNotes: midiTrackData.midiNotes, height: midiTrackData.height)
         }
     }
 }
