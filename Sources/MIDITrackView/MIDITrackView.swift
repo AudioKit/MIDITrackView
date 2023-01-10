@@ -57,6 +57,8 @@ public struct MIDITrackView<Note: View>: View {
                         }
                     }
                 }
+                // Track playhead
+                context.stroke(Path(roundedRect: CGRect(x: 100, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(.secondary), lineWidth: 4)
             } symbols: {
                 note.tag(SymbolID.note)
             }
