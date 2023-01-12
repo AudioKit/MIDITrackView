@@ -4,18 +4,12 @@ import SwiftUI
 import MIDITrackView
 
 struct MIDITrackViewDemo: View {
-    @State var model: MIDITrackViewModel
+    @EnvironmentObject var model: MIDITrackViewModel
 
-    public init(midiNotes: [MIDITrackViewNote] = [], length: CGFloat = 0.0, height: CGFloat = 0.0) {
-        self.model = MIDITrackViewModel(
-            midiNotes: midiNotes,
-            length: length,
-            height: height
-        )
-    }
     public var body: some View {
         VStack {
-            MIDITrackView(model: $model, trackColor: Color.cyan, noteColor: Color.blue, note: RoundedRectangle(cornerRadius: 10.0))
+            MIDITrackView(trackColor: Color.cyan, noteColor: Color.blue, note: RoundedRectangle(cornerRadius: 10.0))
+                .environmentObject(model)
         }
     }
 }

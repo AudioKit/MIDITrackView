@@ -5,7 +5,7 @@ import SwiftUI
 /// A view representing a MIDI Track.
 public struct MIDITrackView<Note: View>: View {
     /// The view model.
-    @Binding var model: MIDITrackViewModel
+    @EnvironmentObject var model: MIDITrackViewModel
 
     /// The view zoom level.
     ///
@@ -18,6 +18,7 @@ public struct MIDITrackView<Note: View>: View {
     ///
     @State public var zoomLevel = 1.0
     @State private var lastZoomLevel = 1.0
+    @State private var isPlaying = false
 
     /// The track background color.
     var trackColor = Color.primary
@@ -30,11 +31,9 @@ public struct MIDITrackView<Note: View>: View {
     /// This is what each note on the track will show up as.
     public let note: Note
 
-    public init(model: Binding<MIDITrackViewModel>,
-                trackColor: Color = .primary,
+    public init(trackColor: Color = .primary,
                 noteColor: Color = .accentColor,
                 note: Note) {
-        _model = model
         self.trackColor = trackColor
         self.noteColor = noteColor
         self.note = note
@@ -58,7 +57,7 @@ public struct MIDITrackView<Note: View>: View {
                     }
                 }
                 // Track playhead
-                context.stroke(Path(roundedRect: CGRect(x: 100 * zoomLevel, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(.secondary), lineWidth: 4)
+                context.stroke(Path(roundedRect: CGRect(x: model.playPos * zoomLevel, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(.secondary), lineWidth: 4)
             } symbols: {
                 note.tag(SymbolID.note)
             }
@@ -87,6 +86,16 @@ public struct MIDITrackView<Note: View>: View {
                 return event
             }
             #endif
+        }
+        .onTapGesture {
+            isPlaying.toggle()
+        }
+        .onChange(of: isPlaying) { newValue in
+            if newValue {
+                model.play()
+            } else {
+                model.stop()
+            }
         }
     }
 }

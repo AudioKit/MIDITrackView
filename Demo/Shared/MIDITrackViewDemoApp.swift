@@ -87,7 +87,12 @@ struct MIDITrackViewDemoApp: App {
     let midiTrackData = MIDITrackData()
     var body: some Scene {
         WindowGroup {
-            MIDITrackViewDemo(midiNotes: midiTrackData.midiNotes, length: midiTrackData.length, height: midiTrackData.height)
+            MIDITrackViewDemo()
+                .environmentObject(
+                    MIDITrackViewModel(midiNotes: midiTrackData.midiNotes,
+                                       length: midiTrackData.length,
+                                       height: midiTrackData.height)
+                )
         }
     }
 }
