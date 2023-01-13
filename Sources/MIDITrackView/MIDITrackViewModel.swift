@@ -18,6 +18,7 @@ public class MIDITrackViewModel: ObservableObject {
                                           block: { timer in
             self.playPos += 1
         })
+        RunLoop.main.add(self.timer, forMode: .common)
     }
 
     /// Stop the MIDI track.
