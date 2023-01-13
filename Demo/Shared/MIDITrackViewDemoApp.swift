@@ -6,13 +6,21 @@ import MIDITrackView
 
 class MIDITrackData {
     var midiNotes: [MIDITrackViewNote]!
+    var tempo: Double!
+    var ticksPerQuarter: UInt16!
     var height: CGFloat = 200.0
     var length: CGFloat = 0.0
     init() {
         let url = Bundle.main.url(forResource: "Demo", withExtension: "mid")!
         let midiFile = try! MIDIFile(midiFile: url)
+        self.tempo = 0.0
+        self.ticksPerQuarter = 0
 
         guard case .track(let track) = midiFile.chunks[1] else { return }
+        // Special case where this type of midi file stores tempo in first track
+        guard case .track(let tempo) = midiFile.chunks[0] else { return }
+        // Special case where MIDI timebase is musical
+        if case .musical(let ticksPerQuarter) = midiFile.timeBase { self.ticksPerQuarter = ticksPerQuarter }
 
         var highNote: UInt7 = 0
         var lowNote: UInt7 = UInt7.max
@@ -23,6 +31,15 @@ class MIDITrackData {
         var noteEventPositions: [UInt32] = []
         var noteEventLengths: [UInt32] = []
         var notePosition: UInt32 = 0
+        
+        for event in tempo.events {
+            switch(event) {
+            case .tempo(_, let tempoEvent):
+                self.tempo = tempoEvent.bpm
+            default:
+                break
+            }
+        }
 
         var i = 0
 
@@ -91,7 +108,9 @@ struct MIDITrackViewDemoApp: App {
                 .environmentObject(
                     MIDITrackViewModel(midiNotes: midiTrackData.midiNotes,
                                        length: midiTrackData.length,
-                                       height: midiTrackData.height)
+                                       height: midiTrackData.height,
+                                       bpm: midiTrackData.tempo,
+                                       ticksPerQuarter: midiTrackData.ticksPerQuarter)
                 )
         }
     }
