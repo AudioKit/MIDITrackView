@@ -18,7 +18,6 @@ public struct MIDITrackView<Note: View>: View {
     ///
     @State public var zoomLevel = 1.0
     @State private var lastZoomLevel = 1.0
-    @State private var isPlaying = false
 
     /// The track background color.
     var trackColor = Color.primary
@@ -86,16 +85,6 @@ public struct MIDITrackView<Note: View>: View {
                 return event
             }
             #endif
-        }
-        .onTapGesture {
-            isPlaying.toggle()
-        }
-        .onChange(of: isPlaying) { newValue in
-            if newValue {
-                model.play()
-            } else {
-                model.stop()
-            }
         }
     }
 }
