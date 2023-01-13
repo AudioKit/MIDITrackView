@@ -19,6 +19,8 @@
 		60D332862915CA9A00EAD0D7 /* MIDITrackViewDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */; };
 		60D332872915CA9C00EAD0D7 /* MIDITrackViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D3325F2915C6B300EAD0D7 /* MIDITrackViewDemo.swift */; };
 		60D332882915CAA300EAD0D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60D332612915C6B400EAD0D7 /* Assets.xcassets */; };
+		60F2CE6C2970F7B400543AB3 /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60F2CE6B2970F7B400543AB3 /* AudioKit */; };
+		60F2CE6E2970F7E600543AB3 /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 60F2CE6D2970F7E600543AB3 /* AudioKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60F2CE6E2970F7E600543AB3 /* AudioKit in Frameworks */,
 				60D332702915C77A00EAD0D7 /* MIDITrackView in Frameworks */,
 				60C33E90296A95B70066D196 /* MIDIKitSMF in Frameworks */,
 			);
@@ -46,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60F2CE6C2970F7B400543AB3 /* AudioKit in Frameworks */,
 				60D332852915C9E000EAD0D7 /* MIDITrackView in Frameworks */,
 				60C33E8E296A947C0066D196 /* MIDIKitSMF in Frameworks */,
 			);
@@ -127,6 +131,7 @@
 			packageProductDependencies = (
 				60D3326F2915C77A00EAD0D7 /* MIDITrackView */,
 				60C33E8F296A95B70066D196 /* MIDIKitSMF */,
+				60F2CE6D2970F7E600543AB3 /* AudioKit */,
 			);
 			productName = MIDITrackViewDemo;
 			productReference = 60D3325A2915C6B300EAD0D7 /* MIDITrackViewDemo.app */;
@@ -148,6 +153,7 @@
 			packageProductDependencies = (
 				60D332842915C9E000EAD0D7 /* MIDITrackView */,
 				60C33E8D296A947C0066D196 /* MIDIKitSMF */,
+				60F2CE6B2970F7B400543AB3 /* AudioKit */,
 			);
 			productName = "MIDITrackViewDemo (iOS)";
 			productReference = 60D332762915C99C00EAD0D7 /* MIDITrackViewDemo.app */;
@@ -182,6 +188,7 @@
 			mainGroup = 60D332512915C6B300EAD0D7;
 			packageReferences = (
 				60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				60F2CE6A2970F7B400543AB3 /* XCRemoteSwiftPackageReference "AudioKit" */,
 			);
 			productRefGroup = 60D3325B2915C6B300EAD0D7 /* Products */;
 			projectDirPath = "";
@@ -527,6 +534,14 @@
 				version = 0.7.2;
 			};
 		};
+		60F2CE6A2970F7B400543AB3 /* XCRemoteSwiftPackageReference "AudioKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AudioKit/AudioKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -547,6 +562,16 @@
 		60D332842915C9E000EAD0D7 /* MIDITrackView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDITrackView;
+		};
+		60F2CE6B2970F7B400543AB3 /* AudioKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60F2CE6A2970F7B400543AB3 /* XCRemoteSwiftPackageReference "AudioKit" */;
+			productName = AudioKit;
+		};
+		60F2CE6D2970F7E600543AB3 /* AudioKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 60F2CE6A2970F7B400543AB3 /* XCRemoteSwiftPackageReference "AudioKit" */;
+			productName = AudioKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
