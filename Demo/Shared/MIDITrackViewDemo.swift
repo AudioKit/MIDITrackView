@@ -6,13 +6,24 @@ import AudioKit
 
 /// A class to manage audio playback within the view
 class Conductor {
-    let midiInstrument = AppleSequencer(fromURL: Bundle.main.url(forResource: "Demo", withExtension: "mid")!)
+    let midiInstrument = AppleSequencer()
     let sampler = MIDISampler()
     let engine = AudioEngine()
     init() {
+        guard let url = Bundle.main.url(forResource: "Demo", withExtension: "mid") else {
+            print("No URL found for MIDI file")
+            return
+        }
+
+        midiInstrument.loadMIDIFile(fromURL: url)
         midiInstrument.setGlobalMIDIOutput(sampler.midiIn)
         engine.output = sampler
-        try! engine.start()
+
+        do {
+            try engine.start()
+        } catch {
+            print(error.localizedDescription, " - (The audio engine could not start.)")
+        }
     }
 }
 

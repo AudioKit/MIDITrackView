@@ -5,16 +5,24 @@ import MIDIKitSMF
 import MIDITrackView
 
 class MIDITrackData {
-    var midiNotes: [MIDITrackViewNote]!
-    var tempo: Double!
-    var ticksPerQuarter: UInt16!
+    var midiNotes: [MIDITrackViewNote] = []
+    var tempo: Double = 0.0
+    var ticksPerQuarter: UInt16 = 0
     var height: CGFloat = 200.0
     var length: CGFloat = 0.0
     init() {
-        let url = Bundle.main.url(forResource: "Demo", withExtension: "mid")!
-        let midiFile = try! MIDIFile(midiFile: url)
-        self.tempo = 0.0
-        self.ticksPerQuarter = 0
+        var midiFile = MIDIFile()
+
+        guard let url = Bundle.main.url(forResource: "Demo", withExtension: "mid") else {
+            print("No URL found for MIDI file")
+            return
+        }
+
+        do {
+            midiFile = try MIDIFile(midiFile: url)
+        } catch {
+            print(error.localizedDescription, " - (MIDI File Not Found)")
+        }
 
         guard case .track(let track) = midiFile.chunks[2] else { return }
         // Special case where this type of midi file stores tempo in first track
