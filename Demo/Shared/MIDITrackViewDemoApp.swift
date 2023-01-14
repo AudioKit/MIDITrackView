@@ -66,7 +66,7 @@ class MIDITrackData {
                 highNote = (noteOnEvent.note.number > highNote) ? noteOnEvent.note.number : highNote
                 lowNote = (noteOnEvent.note.number < lowNote) ? noteOnEvent.note.number : lowNote
                 noteRange = highNote - lowNote
-                noteHeight = self.height / CGFloat(noteRange)
+                noteHeight = self.height / (CGFloat(noteRange) + 1)
                 maxHeight = self.height - noteHeight
 
                 i += 1
