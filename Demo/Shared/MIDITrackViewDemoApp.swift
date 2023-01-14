@@ -16,7 +16,7 @@ class MIDITrackData {
         self.tempo = 0.0
         self.ticksPerQuarter = 0
 
-        guard case .track(let track) = midiFile.chunks[1] else { return }
+        guard case .track(let track) = midiFile.chunks[2] else { return }
         // Special case where this type of midi file stores tempo in first track
         guard case .track(let tempo) = midiFile.chunks[0] else { return }
         // Special case where MIDI timebase is musical
@@ -53,10 +53,15 @@ class MIDITrackData {
                 let events = Array(track.events[i ..< track.events.count])
 
                 let noteOffEvent = events.first { event in
-                    if case .noteOff(let noteOffDelta, let noteOffEvent) = event {
-                        notePosition += noteOffDelta.ticksValue(using: midiFile.timeBase)
-                        return noteOnEvent.note == noteOffEvent.note
-                    } else {
+                    switch (event) {
+                    case .noteOn(let noteDelta, let noteEvent):
+                        notePosition += noteDelta.ticksValue(using: midiFile.timeBase)
+                        guard noteEvent.midi1ZeroVelocityAsNoteOff else { return false }
+                        return noteEvent.note == noteOnEvent.note
+                    case .noteOff(let noteDelta, let noteEvent):
+                        notePosition += noteDelta.ticksValue(using: midiFile.timeBase)
+                        return noteEvent.note == noteOnEvent.note
+                    default:
                         return false
                     }
                 }
