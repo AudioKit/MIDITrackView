@@ -5,7 +5,7 @@ import SwiftUI
 /// A view representing a MIDI Track.
 public struct MIDITrackView<Note: View>: View {
     /// The view model.
-    @EnvironmentObject var model: MIDITrackViewModel
+    @Binding var model: MIDITrackViewModel
 
     /// The view zoom level.
     ///
@@ -32,10 +32,12 @@ public struct MIDITrackView<Note: View>: View {
 
     public init(trackColor: Color = .primary,
                 noteColor: Color = .accentColor,
-                note: Note) {
+                note: Note,
+                model: Binding<MIDITrackViewModel>) {
         self.trackColor = trackColor
         self.noteColor = noteColor
         self.note = note
+        _model = model
     }
 
     enum SymbolID: Int {
@@ -56,7 +58,7 @@ public struct MIDITrackView<Note: View>: View {
                     }
                 }
                 // Track playhead
-                context.stroke(Path(roundedRect: CGRect(x: model.playPos * zoomLevel, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(.secondary), lineWidth: 4)
+                context.stroke(Path(roundedRect: CGRect(x: 1.0 * zoomLevel, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(.secondary), lineWidth: 4)
             } symbols: {
                 note.tag(SymbolID.note)
             }

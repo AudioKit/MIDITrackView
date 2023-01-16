@@ -2,9 +2,7 @@
 
 import SwiftUI
 
-public struct MIDITrackViewNote: Equatable, Identifiable {
-    /// Unique identifier (for use in the model).
-    public var id = UUID()
+public struct MIDITrackViewNote {
     /// The note rectangle (for use in rendering).
     public let rect: CGRect
 
