@@ -138,6 +138,7 @@ struct Conductor {
 
 struct MIDITrackViewDemo: View {
     @State private var model = MIDITrackViewModel()
+    @State private var playPos = 0.0
     @State private var isPlaying = false
 
     let conductor = Conductor()
@@ -148,7 +149,8 @@ struct MIDITrackViewDemo: View {
             MIDITrackView(trackColor: Color.cyan,
                           noteColor: Color.blue,
                           note: RoundedRectangle(cornerRadius: 10.0),
-                          model: $model)
+                          model: $model,
+                          playPos: $playPos)
             .onTapGesture {
                 isPlaying.toggle()
             }
