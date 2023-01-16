@@ -108,7 +108,7 @@ class MIDITrackData {
         }
 
         self.midiNotes = midiNotes
-        length = CGFloat(CGFloat(notePosition) + (self.midiNotes.last?.rect.width ?? 0))
+        length = CGFloat(CGFloat(notePosition))
     }
 }
 
