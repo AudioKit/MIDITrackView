@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		60C33E8E296A947C0066D196 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60C33E8D296A947C0066D196 /* MIDIKitSMF */; };
-		60C33E90296A95B70066D196 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60C33E8F296A95B70066D196 /* MIDIKitSMF */; };
+		60BE57792975CD860096AB54 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60BE57782975CD860096AB54 /* MIDIKitSMF */; };
+		60BE577B2975CD9A0096AB54 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60BE577A2975CD9A0096AB54 /* MIDIKitSMF */; };
 		60C33E92296AA0C60066D196 /* Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60C33E91296AA0C60066D196 /* Demo.mid */; };
 		60C33E93296AA0C60066D196 /* Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60C33E91296AA0C60066D196 /* Demo.mid */; };
 		60D3325E2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */; };
@@ -39,9 +39,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60BE577B2975CD9A0096AB54 /* MIDIKitSMF in Frameworks */,
 				60F2CE6E2970F7E600543AB3 /* AudioKit in Frameworks */,
 				60D332702915C77A00EAD0D7 /* MIDITrackView in Frameworks */,
-				60C33E90296A95B70066D196 /* MIDIKitSMF in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,9 +49,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60BE57792975CD860096AB54 /* MIDIKitSMF in Frameworks */,
 				60F2CE6C2970F7B400543AB3 /* AudioKit in Frameworks */,
 				60D332852915C9E000EAD0D7 /* MIDITrackView in Frameworks */,
-				60C33E8E296A947C0066D196 /* MIDIKitSMF in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,8 +130,8 @@
 			name = "MIDITrackViewDemo (macOS)";
 			packageProductDependencies = (
 				60D3326F2915C77A00EAD0D7 /* MIDITrackView */,
-				60C33E8F296A95B70066D196 /* MIDIKitSMF */,
 				60F2CE6D2970F7E600543AB3 /* AudioKit */,
+				60BE577A2975CD9A0096AB54 /* MIDIKitSMF */,
 			);
 			productName = MIDITrackViewDemo;
 			productReference = 60D3325A2915C6B300EAD0D7 /* MIDITrackViewDemo.app */;
@@ -152,8 +152,8 @@
 			name = "MIDITrackViewDemo (iOS)";
 			packageProductDependencies = (
 				60D332842915C9E000EAD0D7 /* MIDITrackView */,
-				60C33E8D296A947C0066D196 /* MIDIKitSMF */,
 				60F2CE6B2970F7B400543AB3 /* AudioKit */,
+				60BE57782975CD860096AB54 /* MIDIKitSMF */,
 			);
 			productName = "MIDITrackViewDemo (iOS)";
 			productReference = 60D332762915C99C00EAD0D7 /* MIDITrackViewDemo.app */;
@@ -187,8 +187,8 @@
 			);
 			mainGroup = 60D332512915C6B300EAD0D7;
 			packageReferences = (
-				60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */,
 				60F2CE6A2970F7B400543AB3 /* XCRemoteSwiftPackageReference "AudioKit" */,
+				60BE57772975CD860096AB54 /* XCRemoteSwiftPackageReference "MIDIKit" */,
 			);
 			productRefGroup = 60D3325B2915C6B300EAD0D7 /* Products */;
 			projectDirPath = "";
@@ -526,12 +526,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+		60BE57772975CD860096AB54 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
-				kind = exactVersion;
-				version = 0.7.2;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.3;
 			};
 		};
 		60F2CE6A2970F7B400543AB3 /* XCRemoteSwiftPackageReference "AudioKit" */ = {
@@ -545,14 +545,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		60C33E8D296A947C0066D196 /* MIDIKitSMF */ = {
+		60BE57782975CD860096AB54 /* MIDIKitSMF */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			package = 60BE57772975CD860096AB54 /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKitSMF;
 		};
-		60C33E8F296A95B70066D196 /* MIDIKitSMF */ = {
+		60BE577A2975CD9A0096AB54 /* MIDIKitSMF */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 60C33E8C296A947C0066D196 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			package = 60BE57772975CD860096AB54 /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKitSMF;
 		};
 		60D3326F2915C77A00EAD0D7 /* MIDITrackView */ = {
