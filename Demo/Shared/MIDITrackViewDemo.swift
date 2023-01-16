@@ -140,6 +140,7 @@ struct MIDITrackViewDemo: View {
     @State private var model = MIDITrackViewModel()
     @State private var playPos = 0.0
     @State private var isPlaying = false
+    @State private var timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
 
     let conductor = Conductor()
     let midiTrackData = MIDITrackData()
@@ -156,12 +157,18 @@ struct MIDITrackViewDemo: View {
             }
             .onChange(of: isPlaying) { newValue in
                 if newValue {
+                    timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
                     conductor.midiInstrument.play()
                 } else {
+                    timer.upstream.connect().cancel()
                     conductor.midiInstrument.stop()
                 }
             }
+            .onReceive(timer, perform: { timer in
+                playPos = conductor.midiInstrument.currentPosition.beats * Double(midiTrackData.ticksPerQuarter)
+            })
             .onAppear {
+                timer.upstream.connect().cancel()
                 model = MIDITrackViewModel(midiNotes: midiTrackData.midiNotes,
                                            length: midiTrackData.length,
                                            height: midiTrackData.height)
