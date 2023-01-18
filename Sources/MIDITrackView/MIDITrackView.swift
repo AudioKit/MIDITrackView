@@ -52,17 +52,15 @@ public struct MIDITrackView<Note: View>: View {
         ScrollView(.horizontal,
                    showsIndicators: true) {
             Canvas { context, size in
-                context.drawLayer { ctx in
-                    ctx.scaleBy(x: zoomLevel, y: 1.0)
-                    if let note = ctx.resolveSymbol(id: SymbolID.note) {
-                        for midiNote in model.midiNotes {
-                            let rect = midiNote.rect
-                            ctx.draw(note, in: rect)
-                        }
-                    }
-                }
                 // Track playhead
                 context.stroke(Path(roundedRect: CGRect(x: playPos * zoomLevel, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(.secondary), lineWidth: 4)
+                context.scaleBy(x: zoomLevel, y: 1.0)
+                if let note = context.resolveSymbol(id: SymbolID.note) {
+                    for midiNote in model.midiNotes {
+                        let rect = midiNote.rect
+                        context.draw(note, in: rect)
+                    }
+                }
             } symbols: {
                 note.tag(SymbolID.note)
             }
