@@ -165,7 +165,7 @@ struct MIDITrackViewDemo: View {
                 }
             }
             .onReceive(timer, perform: { timer in
-                playPos = conductor.midiInstrument.currentPosition.beats * Double(midiTrackData.ticksPerQuarter)
+                //playPos = conductor.midiInstrument.currentPosition.beats * Double(midiTrackData.ticksPerQuarter)
             })
             .onAppear {
                 timer.upstream.connect().cancel()
