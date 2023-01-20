@@ -25,6 +25,10 @@ public struct MIDITrackView<Note: View>: View {
     var trackColor = Color.primary
     /// The color of the notes on the track.
     var noteColor = Color.accentColor
+    /// The track minimum zoom level.
+    var minimumZoom = 0.0
+    /// The track maximum zoom level.
+    var maximumZoom = 0.0
 
     /// The view used in a note display.
     ///
@@ -34,11 +38,15 @@ public struct MIDITrackView<Note: View>: View {
 
     public init(trackColor: Color = .primary,
                 noteColor: Color = .accentColor,
+                minimumZoom: Double = 0.0,
+                maximumZoom: Double = 0.0,
                 note: Note,
                 model: Binding<MIDITrackViewModel>,
                 playPos: Binding<Double>) {
         self.trackColor = trackColor
         self.noteColor = noteColor
+        self.minimumZoom = minimumZoom
+        self.maximumZoom = maximumZoom
         self.note = note
         _model = model
         _playPos = playPos
@@ -74,7 +82,7 @@ public struct MIDITrackView<Note: View>: View {
             let delta = val / self.lastZoomLevel
             self.lastZoomLevel = val
             let newScale = self.zoomLevel * delta
-            zoomLevel = max(min(newScale, 5.0), 0.1)
+            zoomLevel = max(min(newScale, maximumZoom), minimumZoom)
 
         }.onEnded { val in
             self.lastZoomLevel = 1.0
@@ -85,7 +93,7 @@ public struct MIDITrackView<Note: View>: View {
                 let rot = event.deltaY
                 let delta = rot > 0 ? (1 - rot / 100) : 1.0/(1 + rot/100)
                 let newScale = self.zoomLevel * delta
-                zoomLevel = max(min(newScale, 5.0), 0.1)
+                zoomLevel = max(min(newScale, maximumZoom), minimumZoom)
                 return event
             }
             #endif

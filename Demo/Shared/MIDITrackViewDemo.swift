@@ -149,6 +149,8 @@ struct MIDITrackViewDemo: View {
         VStack {
             MIDITrackView(trackColor: Color.cyan,
                           noteColor: Color.blue,
+                          minimumZoom: 0.01,
+                          maximumZoom: 500.0,
                           note: RoundedRectangle(cornerRadius: 10.0),
                           model: $model,
                           playPos: $playPos)
