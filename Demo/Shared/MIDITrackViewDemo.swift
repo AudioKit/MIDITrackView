@@ -154,8 +154,23 @@ struct MIDITrackViewDemo: View {
                           note: RoundedRectangle(cornerRadius: 10.0),
                           model: $model,
                           playPos: $playPos)
-            .onTapGesture {
-                isPlaying.toggle()
+            HStack {
+                Button(action: {
+                    isPlaying.toggle()
+                }, label: {
+                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                })
+                Button {
+                    conductor.midiInstrument.stop()
+                    conductor.midiInstrument.rewind()
+                    isPlaying = false
+                } label: {
+                    Image(systemName: "square.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
             }
             .onChange(of: isPlaying) { newValue in
                 if newValue {
