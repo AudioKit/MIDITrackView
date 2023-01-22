@@ -25,6 +25,8 @@ public struct MIDITrackView<Note: View>: View {
     var trackColor = Color.primary
     /// The color of the notes on the track.
     var noteColor = Color.accentColor
+    /// The color of the track playhead.
+    var playheadColor = Color.secondary
     /// The track minimum zoom level.
     var minimumZoom = 0.0
     /// The track maximum zoom level.
@@ -38,6 +40,7 @@ public struct MIDITrackView<Note: View>: View {
 
     public init(trackColor: Color = .primary,
                 noteColor: Color = .accentColor,
+                playheadColor: Color = .secondary,
                 minimumZoom: Double = 0.0,
                 maximumZoom: Double = 0.0,
                 note: Note,
@@ -45,6 +48,7 @@ public struct MIDITrackView<Note: View>: View {
                 playPos: Binding<Double>) {
         self.trackColor = trackColor
         self.noteColor = noteColor
+        self.playheadColor = playheadColor
         self.minimumZoom = minimumZoom
         self.maximumZoom = maximumZoom
         self.note = note
@@ -61,7 +65,7 @@ public struct MIDITrackView<Note: View>: View {
                    showsIndicators: true) {
             Canvas { context, size in
                 // Track playhead
-                context.stroke(Path(roundedRect: CGRect(x: playPos * zoomLevel, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(.secondary), lineWidth: 4)
+                context.stroke(Path(roundedRect: CGRect(x: playPos * zoomLevel, y: 0, width: 1, height: model.height), cornerRadius: 0), with: .color(playheadColor), lineWidth: 4)
                 context.scaleBy(x: zoomLevel, y: 1.0)
                 if let note = context.resolveSymbol(id: SymbolID.note) {
                     for midiNote in model.midiNotes {
