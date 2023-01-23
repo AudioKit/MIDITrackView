@@ -47,6 +47,16 @@ struct MIDITrackData {
         switch(midiFile.format) {
         case .singleTrack:
             // Do something to handle type 0 midi tracks
+            guard case .track(let track) = midiFile.chunks[0] else { return }
+            for event in track.events {
+                switch(event) {
+                case .tempo(_, let tempoEvent):
+                    // TODO: Make tempo array
+                    self.tempo = tempoEvent.bpm
+                default:
+                    break
+                }
+            }
             break
         case .multipleTracksSynchronous:
             guard case .track(let track) = midiFile.chunks[1] else { return }
