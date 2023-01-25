@@ -44,6 +44,9 @@ struct MIDITrackData {
             print(error.localizedDescription, " - (MIDI File Not Found)")
         }
 
+        // Special case where MIDI timebase is musical
+        if case .musical(let ticksPerQuarter) = midiFile.timeBase { self.ticksPerQuarter = ticksPerQuarter }
+
         switch(midiFile.format) {
         case .singleTrack:
             // Do something to handle type 0 midi tracks
@@ -62,8 +65,6 @@ struct MIDITrackData {
             guard case .track(let track) = midiFile.chunks[1] else { return }
             // Special case where this type of midi file stores tempo in first track
             guard case .track(let tempo) = midiFile.chunks[0] else { return }
-            // Special case where MIDI timebase is musical
-            if case .musical(let ticksPerQuarter) = midiFile.timeBase { self.ticksPerQuarter = ticksPerQuarter }
 
             for event in tempo.events {
                 switch(event) {
