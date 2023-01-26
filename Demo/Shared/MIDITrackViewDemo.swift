@@ -59,7 +59,35 @@ struct MIDITrackData {
                 case .programChange(let programDelta, let programEvent):
                     // TODO: Setup tracks from program change hints
                     break
+                case .noteOn(let noteOnDelta, let noteOnEvent):
+                    if noteOnEvent.channel == 0 {
+                        notePosition += noteOnDelta.ticksValue(using: midiFile.timeBase)
+                        if noteOnEvent.midi1ZeroVelocityAsNoteOff && noteOnEvent.velocity.midi1Value == 0 {
+                            noteOffPositions.append(notePosition)
+                            noteOffNumbers.append(noteOnEvent.note.number)
+                        } else {
+                            noteOnPositions.append(notePosition)
+                            noteOnNumbers.append(noteOnEvent.note.number)
+                        }
+
+                        highNote = (noteOnEvent.note.number > highNote) ? noteOnEvent.note.number : highNote
+                        lowNote = (noteOnEvent.note.number < lowNote) ? noteOnEvent.note.number : lowNote
+                        noteRange = highNote - lowNote
+                        noteHeight = self.height / (CGFloat(noteRange) + 1)
+                        maxHeight = self.height - noteHeight
+                    }
+                case .noteOff(let noteOffDelta, let noteOffEvent):
+                    if noteOffEvent.channel == 0 {
+                        notePosition += noteOffDelta.ticksValue(using: midiFile.timeBase)
+                        noteOffPositions.append(notePosition)
+                        noteOffNumbers.append(noteOffEvent.note.number)
+                    }
                 default:
+                    if let channel = event.event()?.channel {
+                        if channel == 0 {
+                            notePosition += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
+                        }
+                    }
                     break
                 }
             }
