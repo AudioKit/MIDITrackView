@@ -56,6 +56,9 @@ struct MIDITrackData {
                 case .tempo(_, let tempoEvent):
                     // TODO: Make tempo array
                     self.tempo = tempoEvent.bpm
+                case .programChange(let programDelta, let programEvent):
+                    // TODO: Setup tracks from program change hints
+                    break
                 default:
                     break
                 }
