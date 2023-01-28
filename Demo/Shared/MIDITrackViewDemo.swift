@@ -12,7 +12,7 @@ extension Collection {
     }
 }
 
-struct MIDITrackData {
+class MIDITrackData {
     var midiNotes: [MIDITrackViewNote] = []
     var tempo: Double = 0.0
     var ticksPerQuarter: UInt16 = 0
