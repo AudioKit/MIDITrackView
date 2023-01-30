@@ -29,17 +29,17 @@ class MIDITrackData {
     var noteOffPositions: [UInt32] = []
     var noteOnNumbers: [UInt7] = []
     var noteOffNumbers: [UInt7] = []
-    var notePosition: UInt32 = 0
+    var currentEventLocation: UInt32 = 0
 
     func handleNoteEvent(event: MIDIFileEvent) {
+        currentEventLocation += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
         switch(event) {
-        case .noteOn(let noteOnDelta, let noteOnEvent):
-            notePosition += noteOnDelta.ticksValue(using: midiFile.timeBase)
+        case .noteOn(_, let noteOnEvent):
             if noteOnEvent.midi1ZeroVelocityAsNoteOff && noteOnEvent.velocity.midi1Value == 0 {
-                noteOffPositions.append(notePosition)
+                noteOffPositions.append(currentEventLocation)
                 noteOffNumbers.append(noteOnEvent.note.number)
             } else {
-                noteOnPositions.append(notePosition)
+                noteOnPositions.append(currentEventLocation)
                 noteOnNumbers.append(noteOnEvent.note.number)
             }
 
@@ -48,12 +48,10 @@ class MIDITrackData {
             noteRange = highNote - lowNote
             noteHeight = self.height / (CGFloat(noteRange) + 1)
             maxHeight = self.height - noteHeight
-        case .noteOff(let noteOffDelta, let noteOffEvent):
-            notePosition += noteOffDelta.ticksValue(using: midiFile.timeBase)
-            noteOffPositions.append(notePosition)
+        case .noteOff(_, let noteOffEvent):
+            noteOffPositions.append(currentEventLocation)
             noteOffNumbers.append(noteOffEvent.note.number)
         default:
-            notePosition += event.smfUnwrappedEvent.delta.ticksValue(using: self.midiFile.timeBase)
             break
         }
     }
@@ -130,7 +128,7 @@ class MIDITrackData {
         }
 
         self.midiNotes = midiNotes
-        length = CGFloat(CGFloat(notePosition))
+        length = CGFloat(CGFloat(currentEventLocation))
     }
 }
 
