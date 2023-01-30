@@ -13,6 +13,7 @@ extension Collection {
 }
 
 class MIDITrackData {
+    var midiFile = MIDIFile()
     var midiNotes: [MIDITrackViewNote] = []
     var tempo: Double = 0.0
     var ticksPerQuarter: UInt16 = 0
@@ -30,8 +31,34 @@ class MIDITrackData {
     var noteOffNumbers: [UInt7] = []
     var notePosition: UInt32 = 0
 
+    func handleNoteEvent(event: MIDIFileEvent) {
+        switch(event) {
+        case .noteOn(let noteOnDelta, let noteOnEvent):
+            notePosition += noteOnDelta.ticksValue(using: midiFile.timeBase)
+            if noteOnEvent.midi1ZeroVelocityAsNoteOff && noteOnEvent.velocity.midi1Value == 0 {
+                noteOffPositions.append(notePosition)
+                noteOffNumbers.append(noteOnEvent.note.number)
+            } else {
+                noteOnPositions.append(notePosition)
+                noteOnNumbers.append(noteOnEvent.note.number)
+            }
+
+            highNote = (noteOnEvent.note.number > highNote) ? noteOnEvent.note.number : highNote
+            lowNote = (noteOnEvent.note.number < lowNote) ? noteOnEvent.note.number : lowNote
+            noteRange = highNote - lowNote
+            noteHeight = self.height / (CGFloat(noteRange) + 1)
+            maxHeight = self.height - noteHeight
+        case .noteOff(let noteOffDelta, let noteOffEvent):
+            notePosition += noteOffDelta.ticksValue(using: midiFile.timeBase)
+            noteOffPositions.append(notePosition)
+            noteOffNumbers.append(noteOffEvent.note.number)
+        default:
+            notePosition += event.smfUnwrappedEvent.delta.ticksValue(using: self.midiFile.timeBase)
+            break
+        }
+    }
+
     init() {
-        var midiFile = MIDIFile()
 
         guard let url = Bundle.main.url(forResource: "Demo", withExtension: "mid") else {
             print("No URL found for MIDI file")
@@ -52,46 +79,12 @@ class MIDITrackData {
             // Do something to handle type 0 midi tracks
             guard case .track(let track) = midiFile.chunks[0] else { return }
             for event in track.events {
-                switch(event) {
-                case .tempo(_, let tempoEvent):
-                    // TODO: Make tempo array
-                    self.tempo = tempoEvent.bpm
-                case .programChange(let programDelta, let programEvent):
-                    // TODO: Setup tracks from program change hints
-                    break
-                case .noteOn(let noteOnDelta, let noteOnEvent):
-                    if noteOnEvent.channel == 0 {
-                        notePosition += noteOnDelta.ticksValue(using: midiFile.timeBase)
-                        if noteOnEvent.midi1ZeroVelocityAsNoteOff && noteOnEvent.velocity.midi1Value == 0 {
-                            noteOffPositions.append(notePosition)
-                            noteOffNumbers.append(noteOnEvent.note.number)
-                        } else {
-                            noteOnPositions.append(notePosition)
-                            noteOnNumbers.append(noteOnEvent.note.number)
-                        }
-
-                        highNote = (noteOnEvent.note.number > highNote) ? noteOnEvent.note.number : highNote
-                        lowNote = (noteOnEvent.note.number < lowNote) ? noteOnEvent.note.number : lowNote
-                        noteRange = highNote - lowNote
-                        noteHeight = self.height / (CGFloat(noteRange) + 1)
-                        maxHeight = self.height - noteHeight
+                if let channel = event.event()?.channel {
+                    if channel == 0 {
+                        handleNoteEvent(event: event)
                     }
-                case .noteOff(let noteOffDelta, let noteOffEvent):
-                    if noteOffEvent.channel == 0 {
-                        notePosition += noteOffDelta.ticksValue(using: midiFile.timeBase)
-                        noteOffPositions.append(notePosition)
-                        noteOffNumbers.append(noteOffEvent.note.number)
-                    }
-                default:
-                    if let channel = event.event()?.channel {
-                        if channel == 0 {
-                            notePosition += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
-                        }
-                    }
-                    break
                 }
             }
-            break
         case .multipleTracksSynchronous:
             guard case .track(let track) = midiFile.chunks[1] else { return }
             // Special case where this type of midi file stores tempo in first track
@@ -107,30 +100,7 @@ class MIDITrackData {
             }
 
             for event in track.events {
-                switch(event) {
-                case .noteOn(let noteOnDelta, let noteOnEvent):
-                    notePosition += noteOnDelta.ticksValue(using: midiFile.timeBase)
-                    if noteOnEvent.midi1ZeroVelocityAsNoteOff && noteOnEvent.velocity.midi1Value == 0 {
-                        noteOffPositions.append(notePosition)
-                        noteOffNumbers.append(noteOnEvent.note.number)
-                    } else {
-                        noteOnPositions.append(notePosition)
-                        noteOnNumbers.append(noteOnEvent.note.number)
-                    }
-
-                    highNote = (noteOnEvent.note.number > highNote) ? noteOnEvent.note.number : highNote
-                    lowNote = (noteOnEvent.note.number < lowNote) ? noteOnEvent.note.number : lowNote
-                    noteRange = highNote - lowNote
-                    noteHeight = self.height / (CGFloat(noteRange) + 1)
-                    maxHeight = self.height - noteHeight
-                case .noteOff(let noteOffDelta, let noteOffEvent):
-                    notePosition += noteOffDelta.ticksValue(using: midiFile.timeBase)
-                    noteOffPositions.append(notePosition)
-                    noteOffNumbers.append(noteOffEvent.note.number)
-                default:
-                    notePosition += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
-                    break
-                }
+                handleNoteEvent(event: event)
             }
         default:
             break
