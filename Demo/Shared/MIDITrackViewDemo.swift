@@ -32,7 +32,6 @@ class MIDITrackData {
     var currentEventLocation: UInt32 = 0
 
     func handleNoteEvent(event: MIDIFileEvent) {
-        currentEventLocation += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
         switch(event) {
         case .noteOn(_, let noteOnEvent):
             if noteOnEvent.midi1ZeroVelocityAsNoteOff && noteOnEvent.velocity.midi1Value == 0 {
@@ -77,6 +76,7 @@ class MIDITrackData {
             // Do something to handle type 0 midi tracks
             guard case .track(let track) = midiFile.chunks[0] else { return }
             for event in track.events {
+                currentEventLocation += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
                 if let channel = event.event()?.channel {
                     if channel == 0 {
                         handleNoteEvent(event: event)
@@ -98,6 +98,7 @@ class MIDITrackData {
             }
 
             for event in track.events {
+                currentEventLocation += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
                 handleNoteEvent(event: event)
             }
         default:
