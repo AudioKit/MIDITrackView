@@ -34,7 +34,7 @@ class MIDITrackData {
     func handleNoteEvent(event: MIDIFileEvent) {
         switch(event) {
         case .noteOn(_, let noteOnEvent):
-            if noteOnEvent.midi1ZeroVelocityAsNoteOff && noteOnEvent.velocity.midi1Value == 0 {
+            if noteOnEvent.velocity.midi1Value == 0 {
                 noteOffPositions.append(currentEventLocation)
                 noteOffNumbers.append(noteOnEvent.note.number)
             } else {
