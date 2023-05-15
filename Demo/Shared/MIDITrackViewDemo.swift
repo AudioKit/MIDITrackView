@@ -57,7 +57,7 @@ class MIDITrackData {
 
     init() {
 
-        guard let url = Bundle.main.url(forResource: "Demo", withExtension: "mid") else {
+        guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
             print("No URL found for MIDI file")
             return
         }
@@ -139,7 +139,7 @@ struct Conductor {
     let sampler = MIDISampler()
     let engine = AudioEngine()
     init() {
-        guard let url = Bundle.main.url(forResource: "Demo", withExtension: "mid") else {
+        guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
             print("No URL found for MIDI file")
             return
         }
