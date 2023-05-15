@@ -175,13 +175,15 @@ struct MIDITrackViewDemo: View {
                           model: $model,
                           playPos: $playPos)
             HStack {
-                Button(action: {
+                Button {
                     isPlaying.toggle()
-                }, label: {
+                } label: {
                     Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                })
+                }
+                .frame(maxWidth: 100.0)
+                .padding(50.0)
                 Button {
                     conductor.midiInstrument.stop()
                     conductor.midiInstrument.rewind()
@@ -191,6 +193,7 @@ struct MIDITrackViewDemo: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 }
+                .frame(maxWidth: 100.0)
             }
             .onChange(of: isPlaying) { newValue in
                 if newValue {
