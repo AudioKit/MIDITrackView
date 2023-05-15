@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60B0B5232A12D56900DAAAF7 /* type0Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60B0B5222A12D56900DAAAF7 /* type0Demo.mid */; };
+		60B0B5242A12D56900DAAAF7 /* type0Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60B0B5222A12D56900DAAAF7 /* type0Demo.mid */; };
 		60BE57792975CD860096AB54 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60BE57782975CD860096AB54 /* MIDIKitSMF */; };
 		60BE577B2975CD9A0096AB54 /* MIDIKitSMF in Frameworks */ = {isa = PBXBuildFile; productRef = 60BE577A2975CD9A0096AB54 /* MIDIKitSMF */; };
 		60C33E92296AA0C60066D196 /* type1Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60C33E91296AA0C60066D196 /* type1Demo.mid */; };
@@ -24,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		60B0B5222A12D56900DAAAF7 /* type0Demo.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = type0Demo.mid; sourceTree = "<group>"; };
 		60C33E91296AA0C60066D196 /* type1Demo.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = type1Demo.mid; sourceTree = "<group>"; };
 		60D3325A2915C6B300EAD0D7 /* MIDITrackViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDITrackViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDITrackViewDemoApp.swift; sourceTree = "<group>"; };
@@ -81,6 +84,7 @@
 		60D3325C2915C6B300EAD0D7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				60B0B5222A12D56900DAAAF7 /* type0Demo.mid */,
 				60C33E91296AA0C60066D196 /* type1Demo.mid */,
 				60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */,
 				60D3325F2915C6B300EAD0D7 /* MIDITrackViewDemo.swift */,
@@ -206,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60D332622915C6B400EAD0D7 /* Assets.xcassets in Resources */,
+				60B0B5242A12D56900DAAAF7 /* type0Demo.mid in Resources */,
 				60C33E93296AA0C60066D196 /* type1Demo.mid in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60D332882915CAA300EAD0D7 /* Assets.xcassets in Resources */,
+				60B0B5232A12D56900DAAAF7 /* type0Demo.mid in Resources */,
 				60C33E92296AA0C60066D196 /* type1Demo.mid in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
