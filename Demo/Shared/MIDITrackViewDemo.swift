@@ -15,6 +15,7 @@ extension Collection {
 class MIDITrackData {
     var midiFile = MIDIFile()
     var midiNotes: [MIDITrackViewNote] = []
+    var trackNumber = 0
     var tempo: Double = 0.0
     var ticksPerQuarter: UInt16 = 0
     var height: CGFloat = 200.0
@@ -55,7 +56,8 @@ class MIDITrackData {
         }
     }
 
-    init() {
+    init(trackNumber: Int) {
+        self.trackNumber = trackNumber
 
         guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
             print("No URL found for MIDI file")
@@ -78,13 +80,13 @@ class MIDITrackData {
             for event in track.events {
                 currentEventLocation += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
                 if let channel = event.event()?.channel {
-                    if channel == 0 {
+                    if channel == trackNumber {
                         handleNoteEvent(event: event)
                     }
                 }
             }
         case .multipleTracksSynchronous:
-            guard case .track(let track) = midiFile.chunks[1] else { return }
+            guard case .track(let track) = midiFile.chunks[trackNumber] else { return }
             // Special case where this type of midi file stores tempo in first track
             guard case .track(let tempo) = midiFile.chunks[0] else { return }
 
@@ -180,13 +182,19 @@ struct Conductor {
 }
 
 struct MIDITrackViewDemo: View {
-    @State private var model = MIDITrackViewModel()
+    @State private var arpModel = MIDITrackViewModel()
+    @State private var chordsModel = MIDITrackViewModel()
+    @State private var bassModel = MIDITrackViewModel()
+    @State private var drumsModel = MIDITrackViewModel()
     @State private var playPos = 0.0
     @State private var isPlaying = false
     @State private var timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
 
     let conductor = Conductor()
-    let midiTrackData = MIDITrackData()
+    let arpData = MIDITrackData(trackNumber: 1)
+    let chordsData = MIDITrackData(trackNumber: 2)
+    let bassData = MIDITrackData(trackNumber: 3)
+    let drumsData = MIDITrackData(trackNumber: 4)
 
     public var body: some View {
         VStack {
@@ -195,7 +203,28 @@ struct MIDITrackViewDemo: View {
                           minimumZoom: 0.01,
                           maximumZoom: 500.0,
                           note: RoundedRectangle(cornerRadius: 10.0),
-                          model: $model,
+                          model: $arpModel,
+                          playPos: $playPos)
+            MIDITrackView(trackColor: Color.cyan,
+                          noteColor: Color.blue,
+                          minimumZoom: 0.01,
+                          maximumZoom: 500.0,
+                          note: RoundedRectangle(cornerRadius: 10.0),
+                          model: $chordsModel,
+                          playPos: $playPos)
+            MIDITrackView(trackColor: Color.cyan,
+                          noteColor: Color.blue,
+                          minimumZoom: 0.01,
+                          maximumZoom: 500.0,
+                          note: RoundedRectangle(cornerRadius: 10.0),
+                          model: $bassModel,
+                          playPos: $playPos)
+            MIDITrackView(trackColor: Color.cyan,
+                          noteColor: Color.blue,
+                          minimumZoom: 0.01,
+                          maximumZoom: 500.0,
+                          note: RoundedRectangle(cornerRadius: 10.0),
+                          model: $drumsModel,
                           playPos: $playPos)
             HStack {
                 Button {
@@ -228,13 +257,22 @@ struct MIDITrackViewDemo: View {
                 }
             }
             .onReceive(timer, perform: { timer in
-                playPos = conductor.midiInstrument.currentPosition.beats * Double(midiTrackData.ticksPerQuarter)
+                playPos = conductor.midiInstrument.currentPosition.beats * Double(arpData.ticksPerQuarter)
             })
             .onAppear {
                 timer.upstream.connect().cancel()
-                model = MIDITrackViewModel(midiNotes: midiTrackData.midiNotes,
-                                           length: midiTrackData.length,
-                                           height: midiTrackData.height)
+                arpModel = MIDITrackViewModel(midiNotes: arpData.midiNotes,
+                                           length: arpData.length,
+                                           height: arpData.height)
+                chordsModel = MIDITrackViewModel(midiNotes: chordsData.midiNotes,
+                                           length: chordsData.length,
+                                           height: chordsData.height)
+                bassModel = MIDITrackViewModel(midiNotes: bassData.midiNotes,
+                                           length: bassData.length,
+                                           height: bassData.height)
+                drumsModel = MIDITrackViewModel(midiNotes: drumsData.midiNotes,
+                                           length: drumsData.length,
+                                           height: drumsData.height)
             }
         }
     }
