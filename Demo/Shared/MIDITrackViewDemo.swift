@@ -136,7 +136,10 @@ class MIDITrackData {
 /// A class to manage audio playback within the view
 struct Conductor {
     let midiInstrument = AppleSequencer()
-    let sampler = MIDISampler()
+    let arpeggioSynthesizer = MIDISampler(name: "Arpeggio Synth")
+    let padSynthesizer = MIDISampler(name: "Pad Synth")
+    let bassSynthesizer = MIDISampler(name: "Bass Synth")
+    let drumKit = MIDISampler(name: "Drums")
     let engine = AudioEngine()
     init() {
         guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
@@ -145,9 +148,29 @@ struct Conductor {
         }
 
         midiInstrument.loadMIDIFile(fromURL: url)
-        midiInstrument.setGlobalMIDIOutput(sampler.midiIn)
-        engine.output = sampler
-
+        midiInstrument.tracks[1].setMIDIOutput(arpeggioSynthesizer.midiIn)
+        midiInstrument.tracks[2].setMIDIOutput(bassSynthesizer.midiIn)
+        midiInstrument.tracks[3].setMIDIOutput(padSynthesizer.midiIn)
+        midiInstrument.tracks[4].setMIDIOutput(drumKit.midiIn)
+        engine.output = Mixer(arpeggioSynthesizer,
+                              padSynthesizer,
+                              bassSynthesizer,
+                              drumKit)
+        let samplerInstruments = [(arpeggioSynthesizer, "Sounds/Sampler Instruments/sqrTone1"),
+                                  (padSynthesizer, "Sounds/Sampler Instruments/sawPiano1"),
+                                  (bassSynthesizer, "Sounds/Sampler Instruments/sawPiano1"),
+                                  (drumKit, "Sounds/Sampler Instruments/drumSimp")]
+        for (sampler,path) in samplerInstruments {
+            if let fileURL = Bundle.main.url(forResource: path, withExtension: "exs") {
+                do {
+                    try sampler.loadInstrument(url: fileURL)
+                } catch {
+                    Log("A file was not found.")
+                }
+            } else {
+                Log("Could not find file")
+            }
+        }
         do {
             try engine.start()
         } catch {
@@ -205,7 +228,7 @@ struct MIDITrackViewDemo: View {
                 }
             }
             .onReceive(timer, perform: { timer in
-                //playPos = conductor.midiInstrument.currentPosition.beats * Double(midiTrackData.ticksPerQuarter)
+                playPos = conductor.midiInstrument.currentPosition.beats * Double(midiTrackData.ticksPerQuarter)
             })
             .onAppear {
                 timer.upstream.connect().cancel()
