@@ -29,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		608EEBB32A16DC2B00C88590 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sounds; sourceTree = "<group>"; };
+		608EEBB62A16E84400C88590 /* MIDITrackViewDemo--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MIDITrackViewDemo--iOS--Info.plist"; sourceTree = "<group>"; };
 		60B0B5222A12D56900DAAAF7 /* type0Demo.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = type0Demo.mid; sourceTree = "<group>"; };
 		60C33E91296AA0C60066D196 /* type1Demo.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = type1Demo.mid; sourceTree = "<group>"; };
 		60D3325A2915C6B300EAD0D7 /* MIDITrackViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDITrackViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +68,7 @@
 		60D332512915C6B300EAD0D7 = {
 			isa = PBXGroup;
 			children = (
+				608EEBB62A16E84400C88590 /* MIDITrackViewDemo--iOS--Info.plist */,
 				60D3326C2915C76E00EAD0D7 /* Packages */,
 				60D3325C2915C6B300EAD0D7 /* Shared */,
 				60D332712915C8C000EAD0D7 /* macOS */,
@@ -453,6 +455,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MIDITrackViewDemo--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -484,6 +487,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MIDITrackViewDemo--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
