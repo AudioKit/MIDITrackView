@@ -16,9 +16,9 @@ public struct MIDITrackView<Note: View>: View {
     /// to adjust the zoom level accordingly. If using a mouse, rotate the scroll wheel to do the same thing.
     ///
     /// ### Important values:
-    /// __Default:__ 1.0, __Minimum:__ 0.1, __Maximum:__ 5.0.
+    /// __Default:__ 0.1, __Minimum:__ 0.1, __Maximum:__ 5.0.
     ///
-    @State public var zoomLevel = 1.0
+    @State public var zoomLevel = 0.1
     @State private var lastZoomLevel = 1.0
 
     /// The track background color.
