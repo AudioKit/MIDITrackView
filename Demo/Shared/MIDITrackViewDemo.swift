@@ -198,34 +198,36 @@ struct MIDITrackViewDemo: View {
 
     public var body: some View {
         VStack {
-            MIDITrackView(trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          minimumZoom: 0.01,
-                          maximumZoom: 500.0,
-                          note: RoundedRectangle(cornerRadius: 10.0),
-                          model: $arpModel,
-                          playPos: $playPos)
-            MIDITrackView(trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          minimumZoom: 0.01,
-                          maximumZoom: 500.0,
-                          note: RoundedRectangle(cornerRadius: 10.0),
-                          model: $chordsModel,
-                          playPos: $playPos)
-            MIDITrackView(trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          minimumZoom: 0.01,
-                          maximumZoom: 500.0,
-                          note: RoundedRectangle(cornerRadius: 10.0),
-                          model: $bassModel,
-                          playPos: $playPos)
-            MIDITrackView(trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          minimumZoom: 0.01,
-                          maximumZoom: 500.0,
-                          note: RoundedRectangle(cornerRadius: 10.0),
-                          model: $drumsModel,
-                          playPos: $playPos)
+            ScrollView {
+                MIDITrackView(trackColor: Color.cyan,
+                              noteColor: Color.blue,
+                              minimumZoom: 0.01,
+                              maximumZoom: 500.0,
+                              note: RoundedRectangle(cornerRadius: 10.0),
+                              model: $arpModel,
+                              playPos: $playPos)
+                MIDITrackView(trackColor: Color.cyan,
+                              noteColor: Color.blue,
+                              minimumZoom: 0.01,
+                              maximumZoom: 500.0,
+                              note: RoundedRectangle(cornerRadius: 10.0),
+                              model: $chordsModel,
+                              playPos: $playPos)
+                MIDITrackView(trackColor: Color.cyan,
+                              noteColor: Color.blue,
+                              minimumZoom: 0.01,
+                              maximumZoom: 500.0,
+                              note: RoundedRectangle(cornerRadius: 10.0),
+                              model: $bassModel,
+                              playPos: $playPos)
+                MIDITrackView(trackColor: Color.cyan,
+                              noteColor: Color.blue,
+                              minimumZoom: 0.01,
+                              maximumZoom: 500.0,
+                              note: RoundedRectangle(cornerRadius: 10.0),
+                              model: $drumsModel,
+                              playPos: $playPos)
+            }
             HStack {
                 Button {
                     isPlaying.toggle()
@@ -257,7 +259,7 @@ struct MIDITrackViewDemo: View {
                 }
             }
             .onReceive(timer, perform: { timer in
-                playPos = conductor.midiInstrument.currentPosition.beats * Double(arpData.ticksPerQuarter)
+                //playPos = conductor.midiInstrument.currentPosition.beats * Double(arpData.ticksPerQuarter)
             })
             .onAppear {
                 timer.upstream.connect().cancel()
