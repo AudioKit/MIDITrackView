@@ -13,15 +13,28 @@ extension Collection {
 
 class MIDITrackData {
     var midiNotes: [MIDITrackViewNote] = []
-    var length: Double
-    var height: Double
+    var length: CGFloat
+    var height: CGFloat = 200.0
+    var highNote: MIDINoteNumber = 0
+    var lowNote: MIDINoteNumber = MIDINoteNumber.max
+    var noteRange: MIDINoteNumber = 0
+    var noteHeight: CGFloat = 0.0
+    var maxHeight: CGFloat = 0.0
 
-    init(noteData: [MIDINoteData], length: Double, height: Double) {
-        for note in noteData {
-            midiNotes.append(MIDITrackViewNote(position: note.position.beats, level: CGFloat(note.noteNumber), length: note.duration.beats, height: 10.0))
-        }
+    init(length: CGFloat, height: CGFloat, noteData: [MIDINoteData]) {
         self.length = length
         self.height = height
+        for note in noteData {
+            highNote = (note.noteNumber > highNote) ? note.noteNumber : highNote
+            lowNote = (note.noteNumber < lowNote) ? note.noteNumber : lowNote
+        }
+        self.noteRange = highNote - lowNote
+        self.noteHeight = height / (CGFloat(noteRange) + 1)
+        self.maxHeight = height - noteHeight
+        for note in noteData {
+            let noteLevel = maxHeight - CGFloat(note.noteNumber - lowNote) * noteHeight
+            self.midiNotes.append(MIDITrackViewNote(position: note.position.beats, level: noteLevel, length: note.duration.beats, height: self.noteHeight))
+        }
     }
 }
 
@@ -40,10 +53,10 @@ struct Conductor {
     init() {
         guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
             print("No URL found for MIDI file")
-            arpData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
-            bassData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
-            chordsData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
-            drumsData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
+            arpData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
+            bassData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
+            chordsData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
+            drumsData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
             return
         }
 
@@ -56,10 +69,10 @@ struct Conductor {
         let padLength = midiInstrument.tracks[3].length
         let drumNotes = midiInstrument.tracks[4].getMIDINoteData()
         let drumLength = midiInstrument.tracks[4].length
-        arpData = MIDITrackData(noteData: arpNotes, length: arpLength, height: 100.0)
-        bassData = MIDITrackData(noteData: bassNotes, length: bassLength, height: 100.0)
-        chordsData = MIDITrackData(noteData: padNotes, length: padLength, height: 100.0)
-        drumsData = MIDITrackData(noteData: drumNotes, length: drumLength, height: 100.0)
+        arpData = MIDITrackData(length: arpLength, height: 200.0, noteData: arpNotes)
+        bassData = MIDITrackData(length: bassLength, height: 200.0, noteData: bassNotes)
+        chordsData = MIDITrackData(length: padLength, height: 200.0, noteData: padNotes)
+        drumsData = MIDITrackData(length: drumLength, height: 200.0, noteData: drumNotes)
 
 
         midiInstrument.tracks[1].setMIDIOutput(arpeggioSynthesizer.midiIn)
