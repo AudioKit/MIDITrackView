@@ -2,7 +2,6 @@
 
 import SwiftUI
 import AudioKit
-import MIDIKitSMF
 import MIDITrackView
 
 extension Collection {
@@ -13,125 +12,16 @@ extension Collection {
 }
 
 class MIDITrackData {
-    var midiFile = MIDIFile()
     var midiNotes: [MIDITrackViewNote] = []
-    var trackNumber = 0
-    var tempo: Double = 0.0
-    var ticksPerQuarter: UInt16 = 0
-    var height: CGFloat = 200.0
-    var length: CGFloat = 0.0
+    var length: Double
+    var height: Double
 
-    var highNote: UInt7 = 0
-    var lowNote: UInt7 = UInt7.max
-    var noteRange: UInt7 = 0
-    var noteHeight: CGFloat = 0.0
-    var maxHeight: CGFloat = 0.0
-    var noteOnPositions: [UInt32] = []
-    var noteOffPositions: [UInt32] = []
-    var noteOnNumbers: [UInt7] = []
-    var noteOffNumbers: [UInt7] = []
-    var currentEventLocation: UInt32 = 0
-
-    func handleNoteEvent(event: MIDIFileEvent) {
-        switch(event) {
-        case .noteOn(_, let noteOnEvent):
-            if noteOnEvent.velocity.midi1Value == 0 {
-                noteOffPositions.append(currentEventLocation)
-                noteOffNumbers.append(noteOnEvent.note.number)
-            } else {
-                noteOnPositions.append(currentEventLocation)
-                noteOnNumbers.append(noteOnEvent.note.number)
-            }
-
-            highNote = (noteOnEvent.note.number > highNote) ? noteOnEvent.note.number : highNote
-            lowNote = (noteOnEvent.note.number < lowNote) ? noteOnEvent.note.number : lowNote
-            noteRange = highNote - lowNote
-            noteHeight = self.height / (CGFloat(noteRange) + 1)
-            maxHeight = self.height - noteHeight
-        case .noteOff(_, let noteOffEvent):
-            noteOffPositions.append(currentEventLocation)
-            noteOffNumbers.append(noteOffEvent.note.number)
-        default:
-            break
+    init(noteData: [MIDINoteData], length: Double, height: Double) {
+        for note in noteData {
+            midiNotes.append(MIDITrackViewNote(position: note.position.beats, level: CGFloat(note.noteNumber), length: note.duration.beats, height: 10.0))
         }
-    }
-
-    init(trackNumber: Int) {
-        self.trackNumber = trackNumber
-
-        guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
-            print("No URL found for MIDI file")
-            return
-        }
-
-        do {
-            midiFile = try MIDIFile(midiFile: url)
-        } catch {
-            print(error.localizedDescription, " - (MIDI File Not Found)")
-        }
-
-        // Special case where MIDI timebase is musical
-        if case .musical(let ticksPerQuarter) = midiFile.timeBase { self.ticksPerQuarter = ticksPerQuarter }
-
-        switch(midiFile.format) {
-        case .singleTrack:
-            // Do something to handle type 0 midi tracks
-            guard case .track(let track) = midiFile.chunks[0] else { return }
-            for event in track.events {
-                currentEventLocation += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
-                if let channel = event.event()?.channel {
-                    if channel == trackNumber {
-                        handleNoteEvent(event: event)
-                    }
-                }
-            }
-        case .multipleTracksSynchronous:
-            guard case .track(let track) = midiFile.chunks[trackNumber] else { return }
-            // Special case where this type of midi file stores tempo in first track
-            guard case .track(let tempo) = midiFile.chunks[0] else { return }
-
-            for event in tempo.events {
-                switch(event) {
-                case .tempo(_, let tempoEvent):
-                    self.tempo = tempoEvent.bpm
-                default:
-                    break
-                }
-            }
-
-            for event in track.events {
-                currentEventLocation += event.smfUnwrappedEvent.delta.ticksValue(using: midiFile.timeBase)
-                handleNoteEvent(event: event)
-            }
-        default:
-            break
-        }
-
-        var midiNotes: [MIDITrackViewNote] = []
-
-        for i in 0..<noteOnPositions.count {
-            var noteNumber: UInt7 = 0
-            var notePosition: CGFloat = 0.0
-            var noteLength: CGFloat = 0.0
-
-            if let number = noteOffNumbers[safe: i] {
-                noteNumber = number - lowNote
-            } else if let number = noteOnNumbers[safe: i] {
-                noteNumber = number - lowNote
-            }
-
-            if let position = noteOnPositions[safe: i] { notePosition = CGFloat(position) }
-            if let offPos = noteOffPositions[safe: i] { noteLength = CGFloat(offPos) - notePosition}
-
-            let noteLevel = maxHeight - CGFloat(noteNumber) * noteHeight
-
-            let note = MIDITrackViewNote(position: notePosition, level: noteLevel, length: noteLength, height: noteHeight)
-
-            midiNotes.append(note)
-        }
-
-        self.midiNotes = midiNotes
-        length = CGFloat(CGFloat(currentEventLocation))
+        self.length = length
+        self.height = height
     }
 }
 
@@ -143,13 +33,35 @@ struct Conductor {
     let bassSynthesizer = MIDISampler(name: "Bass Synth")
     let drumKit = MIDISampler(name: "Drums")
     let engine = AudioEngine()
+    var arpData: MIDITrackData
+    var bassData: MIDITrackData
+    var chordsData: MIDITrackData
+    var drumsData: MIDITrackData
     init() {
         guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
             print("No URL found for MIDI file")
+            arpData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
+            bassData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
+            chordsData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
+            drumsData = MIDITrackData(noteData: [], length: 0.0, height: 0.0)
             return
         }
 
         midiInstrument.loadMIDIFile(fromURL: url)
+        let arpNotes = midiInstrument.tracks[1].getMIDINoteData()
+        let arpLength = midiInstrument.tracks[1].length
+        let bassNotes = midiInstrument.tracks[2].getMIDINoteData()
+        let bassLength = midiInstrument.tracks[2].length
+        let padNotes = midiInstrument.tracks[3].getMIDINoteData()
+        let padLength = midiInstrument.tracks[3].length
+        let drumNotes = midiInstrument.tracks[4].getMIDINoteData()
+        let drumLength = midiInstrument.tracks[4].length
+        arpData = MIDITrackData(noteData: arpNotes, length: arpLength, height: 100.0)
+        bassData = MIDITrackData(noteData: bassNotes, length: bassLength, height: 100.0)
+        chordsData = MIDITrackData(noteData: padNotes, length: padLength, height: 100.0)
+        drumsData = MIDITrackData(noteData: drumNotes, length: drumLength, height: 100.0)
+
+
         midiInstrument.tracks[1].setMIDIOutput(arpeggioSynthesizer.midiIn)
         midiInstrument.tracks[2].setMIDIOutput(bassSynthesizer.midiIn)
         midiInstrument.tracks[3].setMIDIOutput(padSynthesizer.midiIn)
@@ -191,10 +103,6 @@ struct MIDITrackViewDemo: View {
     @State private var timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
 
     let conductor = Conductor()
-    let arpData = MIDITrackData(trackNumber: 1)
-    let chordsData = MIDITrackData(trackNumber: 2)
-    let bassData = MIDITrackData(trackNumber: 3)
-    let drumsData = MIDITrackData(trackNumber: 4)
 
     public var body: some View {
         VStack {
@@ -259,22 +167,22 @@ struct MIDITrackViewDemo: View {
                 }
             }
             .onReceive(timer, perform: { timer in
-                playPos = conductor.midiInstrument.currentPosition.beats * Double(arpData.ticksPerQuarter)
+                playPos = conductor.midiInstrument.currentPosition.beats
             })
             .onAppear {
                 timer.upstream.connect().cancel()
-                arpModel = MIDITrackViewModel(midiNotes: arpData.midiNotes,
-                                           length: arpData.length,
-                                           height: arpData.height)
-                chordsModel = MIDITrackViewModel(midiNotes: chordsData.midiNotes,
-                                           length: chordsData.length,
-                                           height: chordsData.height)
-                bassModel = MIDITrackViewModel(midiNotes: bassData.midiNotes,
-                                           length: bassData.length,
-                                           height: bassData.height)
-                drumsModel = MIDITrackViewModel(midiNotes: drumsData.midiNotes,
-                                           length: drumsData.length,
-                                           height: drumsData.height)
+                arpModel = MIDITrackViewModel(midiNotes: conductor.arpData.midiNotes,
+                                              length: conductor.arpData.length,
+                                              height: conductor.arpData.height)
+                chordsModel = MIDITrackViewModel(midiNotes: conductor.chordsData.midiNotes,
+                                                 length: conductor.chordsData.length,
+                                                 height: conductor.chordsData.height)
+                bassModel = MIDITrackViewModel(midiNotes: conductor.bassData.midiNotes,
+                                               length: conductor.bassData.length,
+                                               height: conductor.bassData.height)
+                drumsModel = MIDITrackViewModel(midiNotes: conductor.drumsData.midiNotes,
+                                                length: conductor.drumsData.length,
+                                                height: conductor.drumsData.height)
             }
         }
     }
