@@ -150,25 +150,9 @@ struct MIDITrackViewDemo: View {
                               playPos: $playPos)
             }
             HStack {
-                Button {
-                    isPlaying.toggle()
-                } label: {
-                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                }
-                .frame(maxWidth: 100.0)
-                .padding(50.0)
-                Button {
-                    conductor.midiInstrument.stop()
-                    conductor.midiInstrument.rewind()
-                    isPlaying = false
-                } label: {
-                    Image(systemName: "square.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                }
-                .frame(maxWidth: 100.0)
+                playPauseButton
+                    .padding(50.0)
+                stopButton
             }
             .onChange(of: isPlaying) { newValue in
                 if newValue {
@@ -198,6 +182,30 @@ struct MIDITrackViewDemo: View {
                                                 height: conductor.drumsData.height)
             }
         }
+    }
+
+    var playPauseButton: some View {
+        Button {
+            isPlaying.toggle()
+        } label: {
+            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }
+        .frame(maxWidth: 100.0)
+    }
+
+    var stopButton: some View {
+        Button {
+            conductor.midiInstrument.stop()
+            conductor.midiInstrument.rewind()
+            isPlaying = false
+        } label: {
+            Image(systemName: "square.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }
+        .frame(maxWidth: 100.0)
     }
 }
 
