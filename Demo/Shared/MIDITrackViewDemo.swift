@@ -259,7 +259,7 @@ struct MIDITrackViewDemo: View {
                 }
             }
             .onReceive(timer, perform: { timer in
-                //playPos = conductor.midiInstrument.currentPosition.beats * Double(arpData.ticksPerQuarter)
+                playPos = conductor.midiInstrument.currentPosition.beats * Double(arpData.ticksPerQuarter)
             })
             .onAppear {
                 timer.upstream.connect().cancel()
