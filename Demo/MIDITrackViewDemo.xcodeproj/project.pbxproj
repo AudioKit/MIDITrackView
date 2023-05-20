@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		608EEBB42A16DC2B00C88590 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = 608EEBB32A16DC2B00C88590 /* Sounds */; };
 		608EEBB52A16DC2B00C88590 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = 608EEBB32A16DC2B00C88590 /* Sounds */; };
-		60A16CD72A18485400F225CB /* MIDITrackNoteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A16CD62A18485400F225CB /* MIDITrackNoteData.swift */; };
-		60A16CD82A18485400F225CB /* MIDITrackNoteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A16CD62A18485400F225CB /* MIDITrackNoteData.swift */; };
+		60A16CD72A18485400F225CB /* MIDITrackData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A16CD62A18485400F225CB /* MIDITrackData.swift */; };
+		60A16CD82A18485400F225CB /* MIDITrackData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A16CD62A18485400F225CB /* MIDITrackData.swift */; };
 		60A16CDA2A1848E000F225CB /* Conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A16CD92A1848E000F225CB /* Conductor.swift */; };
 		60A16CDB2A1848E000F225CB /* Conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A16CD92A1848E000F225CB /* Conductor.swift */; };
 		60B0B5232A12D56900DAAAF7 /* type0Demo.mid in Resources */ = {isa = PBXBuildFile; fileRef = 60B0B5222A12D56900DAAAF7 /* type0Demo.mid */; };
@@ -32,7 +32,7 @@
 /* Begin PBXFileReference section */
 		608EEBB32A16DC2B00C88590 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sounds; sourceTree = "<group>"; };
 		608EEBB62A16E84400C88590 /* MIDITrackViewDemo--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MIDITrackViewDemo--iOS--Info.plist"; sourceTree = "<group>"; };
-		60A16CD62A18485400F225CB /* MIDITrackNoteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDITrackNoteData.swift; sourceTree = "<group>"; };
+		60A16CD62A18485400F225CB /* MIDITrackData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDITrackData.swift; sourceTree = "<group>"; };
 		60A16CD92A1848E000F225CB /* Conductor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conductor.swift; sourceTree = "<group>"; };
 		60B0B5222A12D56900DAAAF7 /* type0Demo.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = type0Demo.mid; sourceTree = "<group>"; };
 		60C33E91296AA0C60066D196 /* type1Demo.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = type1Demo.mid; sourceTree = "<group>"; };
@@ -95,7 +95,7 @@
 				60B0B5222A12D56900DAAAF7 /* type0Demo.mid */,
 				60C33E91296AA0C60066D196 /* type1Demo.mid */,
 				60A16CD92A1848E000F225CB /* Conductor.swift */,
-				60A16CD62A18485400F225CB /* MIDITrackNoteData.swift */,
+				60A16CD62A18485400F225CB /* MIDITrackData.swift */,
 				60D3325F2915C6B300EAD0D7 /* MIDITrackViewDemo.swift */,
 				60D3325D2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift */,
 				60D332612915C6B400EAD0D7 /* Assets.xcassets */,
@@ -243,7 +243,7 @@
 			files = (
 				60D332602915C6B300EAD0D7 /* MIDITrackViewDemo.swift in Sources */,
 				60D3325E2915C6B300EAD0D7 /* MIDITrackViewDemoApp.swift in Sources */,
-				60A16CD82A18485400F225CB /* MIDITrackNoteData.swift in Sources */,
+				60A16CD82A18485400F225CB /* MIDITrackData.swift in Sources */,
 				60A16CDB2A1848E000F225CB /* Conductor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,7 +254,7 @@
 			files = (
 				60D332872915CA9C00EAD0D7 /* MIDITrackViewDemo.swift in Sources */,
 				60D332862915CA9A00EAD0D7 /* MIDITrackViewDemoApp.swift in Sources */,
-				60A16CD72A18485400F225CB /* MIDITrackNoteData.swift in Sources */,
+				60A16CD72A18485400F225CB /* MIDITrackData.swift in Sources */,
 				60A16CDA2A1848E000F225CB /* Conductor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
