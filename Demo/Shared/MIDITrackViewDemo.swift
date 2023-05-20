@@ -147,15 +147,7 @@ struct MIDITrackViewDemo: View {
                     .padding(50.0)
                 stopButton
             }
-            .onChange(of: isPlaying) { newValue in
-                if newValue {
-                    timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
-                    conductor.midiInstrument.play()
-                } else {
-                    timer.upstream.connect().cancel()
-                    conductor.midiInstrument.stop()
-                }
-            }
+            .onChange(of: isPlaying, perform: updatePlayer)
             .onReceive(timer, perform: { timer in
                 playPos = conductor.midiInstrument.currentPosition.beats
             })
@@ -178,9 +170,7 @@ struct MIDITrackViewDemo: View {
     }
 
     var playPauseButton: some View {
-        Button {
-            isPlaying.toggle()
-        } label: {
+        Button(action: togglePlayback) {
             Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -189,16 +179,31 @@ struct MIDITrackViewDemo: View {
     }
 
     var stopButton: some View {
-        Button {
-            conductor.midiInstrument.stop()
-            conductor.midiInstrument.rewind()
-            isPlaying = false
-        } label: {
+        Button(action: stopAndRewind) {
             Image(systemName: "square.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }
         .frame(maxWidth: 100.0)
+    }
+
+    func updatePlayer(isPlaying: Bool) {
+        if isPlaying {
+            timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
+            conductor.midiInstrument.play()
+        } else {
+            timer.upstream.connect().cancel()
+            conductor.midiInstrument.stop()
+        }
+    }
+
+    func stopAndRewind() {
+        isPlaying = false
+        conductor.midiInstrument.rewind()
+    }
+
+    func togglePlayback() {
+        isPlaying.toggle()
     }
 }
 
