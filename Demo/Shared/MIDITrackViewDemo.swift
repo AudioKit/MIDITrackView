@@ -63,21 +63,7 @@ struct MIDITrackViewDemo: View {
             }
             .onChange(of: isPlaying, perform: updatePlayer)
             .onReceive(timer, perform: updatePos)
-            .onAppear {
-                timer.upstream.connect().cancel()
-                arpModel = MIDITrackViewModel(midiNotes: conductor.arpData.midiNotes,
-                                              length: conductor.arpData.length,
-                                              height: conductor.arpData.height)
-                chordsModel = MIDITrackViewModel(midiNotes: conductor.chordsData.midiNotes,
-                                                 length: conductor.chordsData.length,
-                                                 height: conductor.chordsData.height)
-                bassModel = MIDITrackViewModel(midiNotes: conductor.bassData.midiNotes,
-                                               length: conductor.bassData.length,
-                                               height: conductor.bassData.height)
-                drumsModel = MIDITrackViewModel(midiNotes: conductor.drumsData.midiNotes,
-                                                length: conductor.drumsData.length,
-                                                height: conductor.drumsData.height)
-            }
+            .onAppear(perform: setupView)
         }
     }
 
@@ -93,6 +79,22 @@ struct MIDITrackViewDemo: View {
             Image(systemName: "square.fill")
                 .playerStyle()
         }
+    }
+
+    func setupView() {
+        timer.upstream.connect().cancel()
+        arpModel = MIDITrackViewModel(midiNotes: conductor.arpData.midiNotes,
+                                      length: conductor.arpData.length,
+                                      height: conductor.arpData.height)
+        chordsModel = MIDITrackViewModel(midiNotes: conductor.chordsData.midiNotes,
+                                         length: conductor.chordsData.length,
+                                         height: conductor.chordsData.height)
+        bassModel = MIDITrackViewModel(midiNotes: conductor.bassData.midiNotes,
+                                       length: conductor.bassData.length,
+                                       height: conductor.bassData.height)
+        drumsModel = MIDITrackViewModel(midiNotes: conductor.drumsData.midiNotes,
+                                        length: conductor.drumsData.length,
+                                        height: conductor.drumsData.height)
     }
 
     func updatePlayer(isPlaying: Bool) {
