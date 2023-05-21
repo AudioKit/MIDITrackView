@@ -53,9 +53,7 @@ struct MIDITrackViewDemo: View {
                 stopButton
             }
             .onChange(of: isPlaying, perform: updatePlayer)
-            .onReceive(timer, perform: { timer in
-                playPos = conductor.midiInstrument.currentPosition.beats
-            })
+            .onReceive(timer, perform: updatePos)
             .onAppear {
                 timer.upstream.connect().cancel()
                 arpModel = MIDITrackViewModel(midiNotes: conductor.arpData.midiNotes,
@@ -100,6 +98,10 @@ struct MIDITrackViewDemo: View {
             timer.upstream.connect().cancel()
             conductor.midiInstrument.stop()
         }
+    }
+
+    func updatePos(time: Date) {
+        playPos = conductor.midiInstrument.currentPosition.beats
     }
 
     func stopAndRewind() {
