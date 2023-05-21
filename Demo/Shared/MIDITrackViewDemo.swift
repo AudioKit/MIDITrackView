@@ -4,6 +4,15 @@ import SwiftUI
 import AudioKit
 import MIDITrackView
 
+extension Image {
+    func playerStyle() -> some View {
+        self
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(maxWidth: 100.0)
+    }
+}
+
 struct MIDITrackViewDemo: View {
     @State private var arpModel = MIDITrackViewModel()
     @State private var chordsModel = MIDITrackViewModel()
@@ -75,19 +84,15 @@ struct MIDITrackViewDemo: View {
     var playPauseButton: some View {
         Button(action: togglePlayback) {
             Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+                .playerStyle()
         }
-        .frame(maxWidth: 100.0)
     }
 
     var stopButton: some View {
         Button(action: stopAndRewind) {
             Image(systemName: "square.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+                .playerStyle()
         }
-        .frame(maxWidth: 100.0)
     }
 
     func updatePlayer(isPlaying: Bool) {
