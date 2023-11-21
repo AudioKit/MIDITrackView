@@ -4,10 +4,10 @@ import SwiftUI
 
 /// A view representing a MIDI Track.
 public struct MIDITrackView<Note: View>: View {
-    /// The view model.
-    @Binding var model: MIDITrackViewModel
+    /// The model for the view which contains an array of ``MIDITrackViewNote``, the track length, and the track height.
+    @Binding public var model: MIDITrackViewModel
     /// The track playhead position.
-    @Binding var playPos: Double
+    @Binding public var playPos: Double
 
     /// The view zoom level.
     ///
@@ -15,27 +15,24 @@ public struct MIDITrackView<Note: View>: View {
     /// This property controls the zoom level of this view. Use the "pinch and drag" gesture on a device screen/trackpad
     /// to adjust the zoom level accordingly. If using a mouse, rotate the scroll wheel to do the same thing.
     ///
-    /// ### Important values:
-    /// __Default:__ 50.0 __Minimum:__ 0.1, __Maximum:__ 5.0.
     ///
     @State public var zoomLevel = 50.0
     @State private var lastZoomLevel = 1.0
 
     /// The track background color.
-    var trackColor = Color.primary
+    public var trackColor = Color.primary
     /// The color of the notes on the track.
-    var noteColor = Color.accentColor
+    public var noteColor = Color.accentColor
     /// The color of the track playhead.
-    var playheadColor = Color.secondary
+    public var playheadColor = Color.secondary
     /// The track minimum zoom level.
-    var minimumZoom = 0.0
+    public var minimumZoom = 0.01
     /// The track maximum zoom level.
-    var maximumZoom = 0.0
-
+    public var maximumZoom = 500.0
     /// The view used in a note display.
     ///
     /// # Description:
-    /// This is what each note on the track will show up as.
+    /// The type of view to display for the note. For example, `RoundedRectangle(cornerRadius: 10.0)`.
     public let note: Note
 
     public init(trackColor: Color = .primary,
