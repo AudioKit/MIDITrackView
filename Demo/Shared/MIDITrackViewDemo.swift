@@ -14,47 +14,34 @@ extension Image {
 }
 
 struct MIDITrackViewDemo: View {
-    @State private var arpModel = MIDITrackViewModel()
-    @State private var chordsModel = MIDITrackViewModel()
-    @State private var bassModel = MIDITrackViewModel()
-    @State private var drumsModel = MIDITrackViewModel()
-    @State private var playPos = 0.0
     @State private var isPlaying = false
     @State private var timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
+    @StateObject private var arpModel = MIDITrackViewModel()
+    @StateObject private var chordModel = MIDITrackViewModel()
+    @StateObject private var bassModel = MIDITrackViewModel()
+    @StateObject private var drumsModel = MIDITrackViewModel()
 
     let conductor = Conductor()
 
     public var body: some View {
         VStack {
             ScrollView {
-                MIDITrackView(trackColor: Color.cyan,
+                MIDITrackView(model: arpModel,
+                              trackColor: Color.cyan,
                               noteColor: Color.blue,
-                              minimumZoom: 0.01,
-                              maximumZoom: 500.0,
-                              note: RoundedRectangle(cornerRadius: 10.0),
-                              model: $arpModel,
-                              playPos: $playPos)
-                MIDITrackView(trackColor: Color.cyan,
+                              note: RoundedRectangle(cornerRadius: 10.0))
+                MIDITrackView(model: chordModel,
+                              trackColor: Color.cyan,
                               noteColor: Color.blue,
-                              minimumZoom: 0.01,
-                              maximumZoom: 500.0,
-                              note: RoundedRectangle(cornerRadius: 10.0),
-                              model: $chordsModel,
-                              playPos: $playPos)
-                MIDITrackView(trackColor: Color.cyan,
+                              note: RoundedRectangle(cornerRadius: 10.0))
+                MIDITrackView(model: bassModel,
+                              trackColor: Color.cyan,
                               noteColor: Color.blue,
-                              minimumZoom: 0.01,
-                              maximumZoom: 500.0,
-                              note: RoundedRectangle(cornerRadius: 10.0),
-                              model: $bassModel,
-                              playPos: $playPos)
-                MIDITrackView(trackColor: Color.cyan,
+                              note: RoundedRectangle(cornerRadius: 10.0))
+                MIDITrackView(model: drumsModel,
+                              trackColor: Color.cyan,
                               noteColor: Color.blue,
-                              minimumZoom: 0.01,
-                              maximumZoom: 500.0,
-                              note: RoundedRectangle(cornerRadius: 10.0),
-                              model: $drumsModel,
-                              playPos: $playPos)
+                              note: RoundedRectangle(cornerRadius: 10.0))
             }
             HStack {
                 playPauseButton
@@ -83,18 +70,18 @@ struct MIDITrackViewDemo: View {
 
     func setupView() {
         timer.upstream.connect().cancel()
-        arpModel = MIDITrackViewModel(midiNotes: conductor.arpData.midiNotes,
-                                      length: conductor.arpData.length,
-                                      height: conductor.arpData.height)
-        chordsModel = MIDITrackViewModel(midiNotes: conductor.chordsData.midiNotes,
-                                         length: conductor.chordsData.length,
-                                         height: conductor.chordsData.height)
-        bassModel = MIDITrackViewModel(midiNotes: conductor.bassData.midiNotes,
-                                       length: conductor.bassData.length,
-                                       height: conductor.bassData.height)
-        drumsModel = MIDITrackViewModel(midiNotes: conductor.drumsData.midiNotes,
-                                        length: conductor.drumsData.length,
-                                        height: conductor.drumsData.height)
+        arpModel.midiNotes = conductor.arpData.midiNotes
+        arpModel.height = conductor.arpData.height
+        arpModel.length = conductor.arpData.length
+        chordModel.midiNotes = conductor.chordsData.midiNotes
+        chordModel.height = conductor.chordsData.height
+        chordModel.length = conductor.chordsData.length
+        bassModel.midiNotes = conductor.bassData.midiNotes
+        bassModel.height = conductor.bassData.height
+        bassModel.length = conductor.bassData.length
+        drumsModel.midiNotes = conductor.drumsData.midiNotes
+        drumsModel.height = conductor.drumsData.height
+        drumsModel.length = conductor.drumsData.length
     }
 
     func updatePlayer(isPlaying: Bool) {
@@ -108,7 +95,11 @@ struct MIDITrackViewDemo: View {
     }
 
     func updatePos(time: Date) {
-        playPos = conductor.midiInstrument.currentPosition.beats
+        let beatPos = conductor.midiInstrument.currentPosition.beats
+        arpModel.playPos = beatPos
+        chordModel.playPos = beatPos
+        bassModel.playPos = beatPos
+        drumsModel.playPos = beatPos
     }
 
     func stopAndRewind() {
