@@ -7,7 +7,7 @@ import MIDITrackView
 /// A class for holding the MIDINoteData to display in the MIDITrackView
 class MIDITrackData {
     var midiNotes: [MIDITrackViewNote] = []
-    var length: CGFloat
+    var length: CGFloat = 0.0
     var height: CGFloat = 200.0
     var highNote: MIDINoteNumber = 0
     var lowNote: MIDINoteNumber = MIDINoteNumber.max
@@ -15,7 +15,7 @@ class MIDITrackData {
     var noteHeight: CGFloat = 0.0
     var maxHeight: CGFloat = 0.0
 
-    init(length: CGFloat, height: CGFloat, noteData: [MIDINoteData]) {
+    init(length: CGFloat = 0.0, height: CGFloat = 200.0, noteData: [MIDINoteData] = []) {
         self.length = length
         self.height = height
         for note in noteData {

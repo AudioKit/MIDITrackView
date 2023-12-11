@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-public class MIDITrackViewModel: ObservableObject {
+public class MIDITrackViewModel {
     public init(midiNotes: [MIDITrackViewNote] = [], length: CGFloat = 0.0, height: CGFloat = 0.0,
                 playPos: Double = 0.0, zoomLevel: Double = 50.0, minimumZoom: Double = 0.01, maximumZoom: Double = 500.0) {
         self.midiNotes = midiNotes
@@ -29,18 +29,18 @@ public class MIDITrackViewModel: ObservableObject {
     }
 
     /// The notes rendered in the view.
-    @Published public var midiNotes: [MIDITrackViewNote]
-    /// The length of the track.
+    public var midiNotes: [MIDITrackViewNote]
+    /// The length of the longest track.
     public var length: CGFloat
-    /// The height of the track.
+    /// The height of all the tracks in the view.
     public var height: CGFloat
-    /// The track's current play position (also the position which the playhead displays)
-    @Published public var playPos: Double
-    /// The track zoom level
-    @Published public var zoomLevel: Double
-    /// The track minimum zoom level.
+    /// The view's current play position (also the position which the playhead displays)
+    public var playPos: Double
+    /// The zoom level of all the tracks in the view
+    public var zoomLevel: Double
+    /// The minimum zoom level.
     public var minimumZoom: Double
-    /// The track maximum zoom level.
+    /// The maximum zoom level.
     public var maximumZoom: Double
     private var lastZoomLevel: Double = 1.0
 }
