@@ -2,8 +2,8 @@
 
 import SwiftUI
 
-public class MIDITrackViewModel {
-    public init(midiNotes: [MIDITrackViewNote] = [], length: CGFloat = 0.0, height: CGFloat = 0.0,
+public class MIDITrackViewModel: ObservableObject {
+    public init(midiNotes: [MIDITrackViewNote] = [], length: CGFloat = 0.0, height: CGFloat = 200.0,
                 playPos: Double = 0.0, zoomLevel: Double = 50.0, minimumZoom: Double = 0.01, maximumZoom: Double = 500.0) {
         self.midiNotes = midiNotes
         self.length = length

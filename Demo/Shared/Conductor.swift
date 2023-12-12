@@ -6,47 +6,46 @@ import MIDITrackView
 
 
 /// A class to manage audio playback within the view
-class Conductor: ObservableObject {
+class Conductor {
     let midiInstrument = AppleSequencer()
     let arpeggioSynthesizer = MIDISampler(name: "Arpeggio Synth")
     let padSynthesizer = MIDISampler(name: "Pad Synth")
     let bassSynthesizer = MIDISampler(name: "Bass Synth")
     let drumKit = MIDISampler(name: "Drums")
     let engine = AudioEngine()
-    var midiTrackData: MIDITrackData!
-    var model: MIDITrackViewModel = MIDITrackViewModel()
-    var midiNoteData: [MIDINoteData] = []
+    var arpData: MIDITrackData
+    var bassData: MIDITrackData
+    var chordsData: MIDITrackData
+    var drumsData: MIDITrackData
     init() {
-        guard let url = Bundle.main.url(forResource: "RUSH_E_FINAL", withExtension: "mid") else {
+        guard let url = Bundle.main.url(forResource: "type1Demo", withExtension: "mid") else {
             print("No URL found for MIDI file")
+            arpData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
+            bassData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
+            chordsData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
+            drumsData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
             return
         }
 
         midiInstrument.loadMIDIFile(fromURL: url)
+        let arpNotes = midiInstrument.tracks[1].getMIDINoteData()
+        let arpLength = midiInstrument.tracks[1].length
+        let bassNotes = midiInstrument.tracks[2].getMIDINoteData()
+        let bassLength = midiInstrument.tracks[2].length
+        let padNotes = midiInstrument.tracks[3].getMIDINoteData()
+        let padLength = midiInstrument.tracks[3].length
+        let drumNotes = midiInstrument.tracks[4].getMIDINoteData()
+        let drumLength = midiInstrument.tracks[4].length
+        arpData = MIDITrackData(length: arpLength, height: 200.0, noteData: arpNotes)
+        bassData = MIDITrackData(length: bassLength, height: 200.0, noteData: bassNotes)
+        chordsData = MIDITrackData(length: padLength, height: 200.0, noteData: padNotes)
+        drumsData = MIDITrackData(length: drumLength, height: 200.0, noteData: drumNotes)
 
-        var bogusTracks = 0
-        var firstTime = true
-        for track in midiInstrument.tracks {
-            if let notEmpty = track.noteData?.isNotEmpty {
-                if (notEmpty == true && firstTime == true) {
-                    midiNoteData = track.getMIDINoteData()
-                    firstTime = false
-                } else if notEmpty == true {
-                    midiNoteData.append(contentsOf: track.getMIDINoteData())
-                } else {
-                    bogusTracks += 1
-                }
-            }
-        }
-        midiTrackData = MIDITrackData(length: midiInstrument.length.beats, height: 200 * CGFloat(midiInstrument.trackCount - bogusTracks), noteData: midiNoteData)
-        model.midiNotes = midiTrackData.midiNotes
-        model.length = midiTrackData.length
-        model.height = midiTrackData.height
 
-        //midiInstrument.tracks[1].setMIDIOutput(arpeggioSynthesizer.midiIn)
-        //midiInstrument.tracks[2].setMIDIOutput(bassSynthesizer.midiIn)
-        //midiInstrument.tracks[3].setMIDIOutput(padSynthesizer.midiIn)
-        //midiInstrument.tracks[4].setMIDIOutput(drumKit.midiIn)
+        midiInstrument.tracks[1].setMIDIOutput(arpeggioSynthesizer.midiIn)
+        midiInstrument.tracks[2].setMIDIOutput(bassSynthesizer.midiIn)
+        midiInstrument.tracks[3].setMIDIOutput(padSynthesizer.midiIn)
+        midiInstrument.tracks[4].setMIDIOutput(drumKit.midiIn)
         engine.output = Mixer(arpeggioSynthesizer,
                               padSynthesizer,
                               bassSynthesizer,

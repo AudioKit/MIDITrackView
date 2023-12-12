@@ -14,13 +14,31 @@ extension Image {
 }
 
 struct MIDITrackViewDemo: View {
+    @StateObject private var arpModel = MIDITrackViewModel()
+    @StateObject private var chordsModel = MIDITrackViewModel()
+    @StateObject private var bassModel = MIDITrackViewModel()
+    @StateObject private var drumsModel = MIDITrackViewModel()
+    @State private var playPos = 0.0
     @State private var isPlaying = false
+    @State private var timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
 
-    @StateObject var conductor = Conductor()
+    let conductor = Conductor()
 
     public var body: some View {
         VStack {
-            MIDITrackView(model: conductor.model,
+            MIDITrackView(model: arpModel,
+                          trackColor: Color.cyan,
+                          noteColor: Color.blue,
+                          note: RoundedRectangle(cornerRadius: 10.0))
+            MIDITrackView(model: chordsModel,
+                          trackColor: Color.cyan,
+                          noteColor: Color.blue,
+                          note: RoundedRectangle(cornerRadius: 10.0))
+            MIDITrackView(model: bassModel,
+                          trackColor: Color.cyan,
+                          noteColor: Color.blue,
+                          note: RoundedRectangle(cornerRadius: 10.0))
+            MIDITrackView(model: drumsModel,
                           trackColor: Color.cyan,
                           noteColor: Color.blue,
                           note: RoundedRectangle(cornerRadius: 10.0))
@@ -30,6 +48,7 @@ struct MIDITrackViewDemo: View {
                 stopButton
             }
             .onChange(of: isPlaying, perform: updatePlayer)
+            .onReceive(timer, perform: updatePos)
             .onAppear(perform: setupView)
         }
     }
@@ -49,19 +68,37 @@ struct MIDITrackViewDemo: View {
     }
 
     func setupView() {
-
+        timer.upstream.connect().cancel()
+        arpModel.midiNotes = conductor.arpData.midiNotes
+        arpModel.height = conductor.arpData.height
+        arpModel.length = conductor.arpData.length
+        chordsModel.midiNotes = conductor.chordsData.midiNotes
+        chordsModel.height = conductor.chordsData.height
+        chordsModel.length = conductor.chordsData.length
+        bassModel.midiNotes = conductor.bassData.midiNotes
+        bassModel.height = conductor.bassData.height
+        bassModel.length = conductor.bassData.length
+        drumsModel.midiNotes = conductor.drumsData.midiNotes
+        drumsModel.height = conductor.drumsData.height
+        drumsModel.length = conductor.drumsData.length
     }
 
     func updatePlayer(isPlaying: Bool) {
         if isPlaying {
+            timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
             conductor.midiInstrument.play()
         } else {
+            timer.upstream.connect().cancel()
             conductor.midiInstrument.stop()
         }
     }
 
     func updatePos(time: Date) {
-
+        let beatPos = conductor.midiInstrument.currentPosition.beats
+        arpModel.playPos = beatPos
+        chordsModel.playPos = beatPos
+        bassModel.playPos = beatPos
+        drumsModel.playPos = beatPos
     }
 
     func stopAndRewind() {

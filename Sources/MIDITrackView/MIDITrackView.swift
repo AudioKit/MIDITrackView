@@ -30,12 +30,12 @@ public struct MIDITrackView<Note: View>: View {
         TimelineView(.animation) { timeline in
             Canvas { context, size in
                 // Track playhead
-                context.fill(Rectangle().path(in: CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)), with: .color(trackColor))
                 context.scaleBy(x: model.zoomLevel, y: 1.0)
+                context.fill(Rectangle().path(in: CGRect(x: 0.0, y: 0.0, width: model.length, height: model.height)), with: .color(trackColor))
+                context.translateBy(x: -model.playPos, y: 0.0)
                 if let note = context.resolveSymbol(id: SymbolID.note) {
                     for midiNote in model.midiNotes {
-                        let rect = CGRect(x: midiNote.rect.minX - model.playPos, y: midiNote.rect.minY, width: midiNote.rect.width, height: midiNote.rect.height)
-                        context.draw(note, in: rect)
+                        context.draw(note, in: midiNote.rect)
                     }
                 }
             } symbols: {
