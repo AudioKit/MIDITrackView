@@ -6,7 +6,7 @@ import SwiftUI
 struct MIDITrackViewDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            MIDITrackViewDemo()
+            MIDITrackViewDemo(conductor: Conductor())
         }
     }
 }

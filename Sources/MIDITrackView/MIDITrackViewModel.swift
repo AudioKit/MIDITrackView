@@ -2,9 +2,8 @@
 
 import SwiftUI
 
-public class MIDITrackViewModel: ObservableObject {
-    public init(midiNotes: [MIDITrackViewNote] = [], length: CGFloat = 0.0, height: CGFloat = 200.0,
-                playPos: Double = 0.0, zoomLevel: Double = 50.0, minimumZoom: Double = 0.01, maximumZoom: Double = 500.0) {
+public struct MIDITrackViewModel {
+    public init(midiNotes: [CGRect], length: CGFloat, height: CGFloat, playPos: Double, zoomLevel: Double, minimumZoom: Double, maximumZoom: Double) {
         self.midiNotes = midiNotes
         self.length = length
         self.height = height
@@ -13,34 +12,37 @@ public class MIDITrackViewModel: ObservableObject {
         self.minimumZoom = minimumZoom
         self.maximumZoom = maximumZoom
     }
-    func updateZoomLevelMagnify(value: CGFloat) {
+    public mutating func updateZoomLevelMagnify(value: CGFloat) {
         let delta = value / lastZoomLevel
         lastZoomLevel = value
         let newScale = zoomLevel * delta
         zoomLevel = max(min(newScale, maximumZoom), minimumZoom)
     }
-    func updateZoomLevelScroll(rot: CGFloat) {
+    public mutating func updateZoomLevelScroll(rot: CGFloat) {
         let delta = rot > 0 ? (1 - rot / 100) : 1.0/(1 + rot/100)
         let newScale = self.zoomLevel * delta
         zoomLevel = max(min(newScale, maximumZoom), minimumZoom)
     }
-    func zoomLevelGestureEnded() {
-        lastZoomLevel = 1.0
-    }
-
+    public mutating func zoomLevelGestureEnded() { lastZoomLevel = 1.0 }
+    public mutating func updatePlayPos(newPos: Double) { playPos = newPos }
+    public func getZoomLevel() -> Double { return zoomLevel }
+    public func getLength() -> CGFloat { return length }
+    public func getHeight() -> CGFloat { return height }
+    public func getPlayPos() -> Double { return playPos }
+    public func getMIDINotes() -> [CGRect] { return midiNotes }
     /// The notes rendered in the view.
-    public var midiNotes: [MIDITrackViewNote]
+    private let midiNotes: [CGRect]
     /// The length of the longest track.
-    public var length: CGFloat
+    private let length: CGFloat
     /// The height of all the tracks in the view.
-    public var height: CGFloat
+    private let height: CGFloat
     /// The view's current play position (also the position which the playhead displays)
-    public var playPos: Double
+    private var playPos: Double
     /// The zoom level of all the tracks in the view
-    public var zoomLevel: Double
+    private var zoomLevel: Double
     /// The minimum zoom level.
-    public var minimumZoom: Double
+    private let minimumZoom: Double
     /// The maximum zoom level.
-    public var maximumZoom: Double
+    private let maximumZoom: Double
     private var lastZoomLevel: Double = 1.0
 }

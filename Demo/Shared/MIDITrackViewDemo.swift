@@ -1,6 +1,7 @@
 // Copyright AudioKit. All Rights Reserved. Revision History at http://github.com/AudioKit/MIDITrackView/
 
 import SwiftUI
+import Combine
 import AudioKit
 import MIDITrackView
 
@@ -14,43 +15,69 @@ extension Image {
 }
 
 struct MIDITrackViewDemo: View {
-    @StateObject private var arpModel = MIDITrackViewModel()
-    @StateObject private var chordsModel = MIDITrackViewModel()
-    @StateObject private var bassModel = MIDITrackViewModel()
-    @StateObject private var drumsModel = MIDITrackViewModel()
-    @State private var playPos = 0.0
-    @State private var isPlaying = false
-    @State private var timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
+    let conductor: Conductor
+    @State private var arpModel: MIDITrackViewModel
+    @State private var chordsModel: MIDITrackViewModel
+    @State private var bassModel: MIDITrackViewModel
+    @State private var drumsModel: MIDITrackViewModel
+    @State private var isPlaying: Bool
+    @State private var timer: Publishers.Autoconnect<Timer.TimerPublisher>
 
-    let conductor = Conductor()
+    init(conductor: Conductor) {
+        self.conductor = conductor
+        self.arpModel = MIDITrackViewModel(midiNotes: conductor.arpData.midiNotes, length: conductor.arpData.length, height: conductor.arpData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.chordsModel = MIDITrackViewModel(midiNotes: conductor.chordsData.midiNotes, length: conductor.chordsData.length, height: conductor.chordsData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.bassModel = MIDITrackViewModel(midiNotes: conductor.bassData.midiNotes, length: conductor.bassData.length, height: conductor.bassData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.drumsModel = MIDITrackViewModel(midiNotes: conductor.drumsData.midiNotes, length: conductor.drumsData.length, height: conductor.drumsData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.isPlaying = false
+        self.timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
+    }
 
     public var body: some View {
         VStack {
-            MIDITrackView(model: arpModel,
+            MIDITrackView(model: $arpModel,
                           trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          note: RoundedRectangle(cornerRadius: 10.0))
-            MIDITrackView(model: chordsModel,
-                          trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          note: RoundedRectangle(cornerRadius: 10.0))
-            MIDITrackView(model: bassModel,
-                          trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          note: RoundedRectangle(cornerRadius: 10.0))
-            MIDITrackView(model: drumsModel,
-                          trackColor: Color.cyan,
-                          noteColor: Color.blue,
-                          note: RoundedRectangle(cornerRadius: 10.0))
+                          noteColor: Color.blue)
+            MIDITrackView(model: $chordsModel,
+                          trackColor: Color.mint,
+                          noteColor: Color.green)
+            MIDITrackView(model: $bassModel,
+                          trackColor: Color.orange,
+                          noteColor: Color.yellow)
+            MIDITrackView(model: $drumsModel,
+                          trackColor: Color.teal,
+                          noteColor: Color.white)
             HStack {
                 playPauseButton
                     .padding(50.0)
                 stopButton
             }
-            .onChange(of: isPlaying, perform: updatePlayer)
-            .onReceive(timer, perform: updatePos)
-            .onAppear(perform: setupView)
         }
+        .gesture(MagnificationGesture().onChanged { val in
+            arpModel.updateZoomLevelMagnify(value: val)
+            chordsModel.updateZoomLevelMagnify(value: val)
+            bassModel.updateZoomLevelMagnify(value: val)
+            drumsModel.updateZoomLevelMagnify(value: val)
+        }.onEnded { val in
+            arpModel.zoomLevelGestureEnded()
+            chordsModel.zoomLevelGestureEnded()
+            bassModel.zoomLevelGestureEnded()
+            drumsModel.zoomLevelGestureEnded()
+        })
+        .onAppear {
+            #if os(macOS)
+            setupView()
+            NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel]) { event in
+                arpModel.updateZoomLevelScroll(rot: event.deltaY)
+                chordsModel.updateZoomLevelScroll(rot: event.deltaY)
+                bassModel.updateZoomLevelScroll(rot: event.deltaY)
+                drumsModel.updateZoomLevelScroll(rot: event.deltaY)
+                return event
+            }
+            #endif
+        }
+        .onChange(of: isPlaying, perform: updatePlayer)
+        .onReceive(timer, perform: updatePos)
     }
 
     var playPauseButton: some View {
@@ -69,18 +96,6 @@ struct MIDITrackViewDemo: View {
 
     func setupView() {
         timer.upstream.connect().cancel()
-        arpModel.midiNotes = conductor.arpData.midiNotes
-        arpModel.height = conductor.arpData.height
-        arpModel.length = conductor.arpData.length
-        chordsModel.midiNotes = conductor.chordsData.midiNotes
-        chordsModel.height = conductor.chordsData.height
-        chordsModel.length = conductor.chordsData.length
-        bassModel.midiNotes = conductor.bassData.midiNotes
-        bassModel.height = conductor.bassData.height
-        bassModel.length = conductor.bassData.length
-        drumsModel.midiNotes = conductor.drumsData.midiNotes
-        drumsModel.height = conductor.drumsData.height
-        drumsModel.length = conductor.drumsData.length
     }
 
     func updatePlayer(isPlaying: Bool) {
@@ -90,15 +105,18 @@ struct MIDITrackViewDemo: View {
         } else {
             timer.upstream.connect().cancel()
             conductor.midiInstrument.stop()
+            arpModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats)
+            chordsModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats)
+            bassModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats)
+            drumsModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats)
         }
     }
 
     func updatePos(time: Date) {
-        let beatPos = conductor.midiInstrument.currentPosition.beats
-        arpModel.playPos = beatPos
-        chordsModel.playPos = beatPos
-        bassModel.playPos = beatPos
-        drumsModel.playPos = beatPos
+        arpModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats.truncatingRemainder(dividingBy: conductor.midiInstrument.length.beats))
+        chordsModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats.truncatingRemainder(dividingBy: conductor.midiInstrument.length.beats))
+        bassModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats.truncatingRemainder(dividingBy: conductor.midiInstrument.length.beats))
+        drumsModel.updatePlayPos(newPos: conductor.midiInstrument.currentPosition.beats.truncatingRemainder(dividingBy: conductor.midiInstrument.length.beats))
     }
 
     func stopAndRewind() {
@@ -113,6 +131,6 @@ struct MIDITrackViewDemo: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        MIDITrackViewDemo()
+        MIDITrackViewDemo(conductor: Conductor())
     }
 }

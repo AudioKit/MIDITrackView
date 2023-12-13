@@ -26,7 +26,7 @@ class Conductor {
             drumsData = MIDITrackData(length: 0.0, height: 0.0, noteData: [])
             return
         }
-
+        midiInstrument.enableLooping()
         midiInstrument.loadMIDIFile(fromURL: url)
         let arpNotes = midiInstrument.tracks[1].getMIDINoteData()
         let arpLength = midiInstrument.tracks[1].length
