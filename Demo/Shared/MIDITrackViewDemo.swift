@@ -35,18 +35,23 @@ struct MIDITrackViewDemo: View {
 
     public var body: some View {
         VStack {
-            MIDITrackView(model: $arpModel,
-                          trackColor: Color.cyan,
-                          noteColor: Color.blue)
-            MIDITrackView(model: $chordsModel,
-                          trackColor: Color.mint,
-                          noteColor: Color.green)
-            MIDITrackView(model: $bassModel,
-                          trackColor: Color.orange,
-                          noteColor: Color.yellow)
-            MIDITrackView(model: $drumsModel,
-                          trackColor: Color.teal,
-                          noteColor: Color.white)
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack {
+                    MIDITrackView(model: $arpModel,
+                                  trackColor: Color.cyan,
+                                  noteColor: Color.blue)
+                    MIDITrackView(model: $chordsModel,
+                                  trackColor: Color.mint,
+                                  noteColor: Color.green)
+                    MIDITrackView(model: $bassModel,
+                                  trackColor: Color.orange,
+                                  noteColor: Color.yellow)
+                    MIDITrackView(model: $drumsModel,
+                                  trackColor: Color.teal,
+                                  noteColor: Color.white)
+                }
+                .frame(minWidth: conductor.midiInstrument.length.beats, maxWidth: .infinity, minHeight: 800, maxHeight: .infinity)
+            }
             HStack {
                 playPauseButton
                     .padding(50.0)
