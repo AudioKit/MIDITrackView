@@ -4,7 +4,7 @@ import SwiftUI
 
 /// A view representing a MIDI Track.
 public struct MIDITrackView: View {
-    /// The model for the view which contains an array of ``MIDITrackViewNote``, the track length, and the track height.
+    /// The model for the view which contains an array of MIDI notes (as `CGRect`), the track length, and the track height.
     @Binding var model: MIDITrackViewModel
     /// The track background color.
     private let trackColor: Color
