@@ -5,18 +5,16 @@ import SwiftUI
 struct MIDITrackViewDemo: View {
     @State var model = MIDITrackViewModel(
         midiNotes: [
-            MIDINote(position: 80, level: 5, length: 102, height: 5),
-            MIDINote(position: 103, level: 23, length: 75, height: 5),
-            MIDINote(position: 157, level: 36, length: 25, height: 5),
-            MIDINote(position: 208, level: 5, length: 102, height: 5),
-            MIDINote(position: 301, level: 23, length: 75, height: 5),
-            MIDINote(position: 376, level: 36, length: 25, height: 5),
-            MIDINote(position: 402, level: 5, length: 102, height: 5),
-            MIDINote(position: 450, level: 23, length: 75, height: 5),
-            MIDINote(position: 500, level: 36, length: 25, height: 5)
+            CGRect(x: 0.5, y: 0.0, width: 1.0, height: 10.0),
+            CGRect(x: 1.0, y: 20.0, width: 1.0, height: 10.0),
+            CGRect(x: 1.5, y: 40.0, width: 5.0, height: 10.0)
         ],
         length: 500,
-        height: 200
+        height: 200,
+        playPos: 0.0,
+        zoomLevel: 50.0,
+        minimumZoom: 0.01,
+        maximumZoom: 1000.0
     )
     public var body: some View {
         VStack {

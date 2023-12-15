@@ -12,12 +12,5 @@ This ``MIDITrackView`` provides a similar user interface to one seen in a Digita
 
 ### Properties
 - ``MIDITrackView/MIDITrackView/model``
-- ``MIDITrackView/MIDITrackView/playPos``
-- ``MIDITrackView/MIDITrackView/zoomLevel``
-- ``MIDITrackView/MIDITrackView/note``
 - ``MIDITrackView/MIDITrackView/trackColor``
 - ``MIDITrackView/MIDITrackView/noteColor``
-- ``MIDITrackView/MIDITrackView/playheadColor``
-- ``MIDITrackView/MIDITrackView/minimumZoom``
-- ``MIDITrackView/MIDITrackView/maximumZoom``
-- ``MIDITrackView/MIDITrackView/note``
