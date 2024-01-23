@@ -2,11 +2,11 @@
 
 import SwiftUI
 
-struct MIDINoteView: Shape {
-    let midiNotes: [CGRect]
+struct MIDINotesView: Shape {
+    let noteRects: [CGRect]
     func path(in rect: CGRect) -> Path {
         var path = Path().path(in: rect)
-        path.addRects(midiNotes)
+        path.addRects(noteRects)
         return path
     }
 }
@@ -30,7 +30,7 @@ public struct MIDITrackView: View {
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10.0).fill(trackColor)
-            MIDINoteView(midiNotes: model.getMIDINotes())
+            MIDINotesView(noteRects: model.getMIDINotes())
             .transform(CGAffineTransformConcat(
                 CGAffineTransform(translationX: -model.getPlayPos(), y: 0.0), 
                 CGAffineTransform(scaleX: model.getZoomLevel(), y: 1.0))

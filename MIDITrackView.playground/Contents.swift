@@ -4,7 +4,7 @@ import SwiftUI
 
 struct MIDITrackViewDemo: View {
     @State var model = MIDITrackViewModel(
-        midiNotes: [
+        noteRects: [
             CGRect(x: 0.5, y: 0.0, width: 1.0, height: 10.0),
             CGRect(x: 1.0, y: 20.0, width: 1.0, height: 10.0),
             CGRect(x: 1.5, y: 40.0, width: 5.0, height: 10.0)

@@ -3,8 +3,8 @@
 import SwiftUI
 
 public struct MIDITrackViewModel {
-    public init(midiNotes: [CGRect], length: CGFloat, height: CGFloat, playPos: Double, zoomLevel: Double, minimumZoom: Double, maximumZoom: Double) {
-        self.midiNotes = midiNotes
+    public init(noteRects: [CGRect], length: CGFloat, height: CGFloat, playPos: Double, zoomLevel: Double, minimumZoom: Double, maximumZoom: Double) {
+        self.noteRects = noteRects
         self.length = length
         self.height = height
         self.playPos = playPos
@@ -29,9 +29,9 @@ public struct MIDITrackViewModel {
     public func getLength() -> CGFloat { return length }
     public func getHeight() -> CGFloat { return height }
     public func getPlayPos() -> Double { return playPos }
-    public func getMIDINotes() -> [CGRect] { return midiNotes }
-    /// The notes rendered in the view.
-    private let midiNotes: [CGRect]
+    public func getMIDINotes() -> [CGRect] { return noteRects }
+    /// The note rectangles rendered in the view.
+    private let noteRects: [CGRect]
     /// The length of the longest track.
     private let length: CGFloat
     /// The height of all the tracks in the view.
