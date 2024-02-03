@@ -2,6 +2,15 @@
 
 import SwiftUI
 
+struct MIDINotesView: Shape {
+    let noteRects: [CGRect]
+    func path(in rect: CGRect) -> Path {
+        var path = Path().path(in: rect)
+        path.addRects(noteRects)
+        return path
+    }
+}
+
 /// A view representing a MIDI Track.
 public struct MIDITrackView: View {
     /// The model for the view which contains an array of MIDI notes (as `CGRect`), the track length, and the track height.
@@ -10,20 +19,24 @@ public struct MIDITrackView: View {
     private let trackColor: Color
     /// The color of the notes on the track.
     private let noteColor: Color
-    public init(model: Binding<MIDITrackViewModel>, trackColor: SwiftUI.Color = Color.primary, noteColor: SwiftUI.Color = Color.accentColor) {
+    public init(model: Binding<MIDITrackViewModel>, 
+                trackColor: SwiftUI.Color = Color.primary,
+                noteColor: SwiftUI.Color = Color.accentColor) {
         _model = model
         self.trackColor = trackColor
         self.noteColor = noteColor
     }
 
     public var body: some View {
-        Canvas { context, size in
-            context.scaleBy(x: model.getZoomLevel(), y: 1.0)
-            context.fill(Rectangle().path(in: CGRect(x: 0.0, y: 0.0, width: model.getLength(), height: model.getHeight())), with: .color(trackColor))
-            context.translateBy(x: -model.getPlayPos(), y: 0.0)
-            var notePath = Path()
-            notePath.addRects(model.getMIDINotes())
-            context.fill(notePath, with: .color(noteColor))
+        ZStack {
+            RoundedRectangle(cornerRadius: 10.0).fill(trackColor)
+            MIDINotesView(noteRects: model.getNoteRects())
+            .transform(CGAffineTransformConcat(
+                CGAffineTransform(translationX: -model.getPlayhead(), y: 0.0),
+                CGAffineTransform(scaleX: model.getZoomLevel(), y: 1.0))
+            )
+            .fill(noteColor)
         }
+        .drawingGroup()
     }
 }

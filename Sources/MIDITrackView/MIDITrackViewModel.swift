@@ -3,11 +3,26 @@
 import SwiftUI
 
 public struct MIDITrackViewModel {
-    public init(midiNotes: [CGRect], length: CGFloat, height: CGFloat, playPos: Double, zoomLevel: Double, minimumZoom: Double, maximumZoom: Double) {
-        self.midiNotes = midiNotes
+    /// The model which holds data for the MIDITrackView
+    /// - Parameters:
+    ///   - noteRects: the note rectangles rendered in the view
+    ///   - length: the length of the longest track
+    ///   - height: the height of the MIDI track
+    ///   - playhead: the playhead of the MIDI track
+    ///   - zoomLevel: the zoom level of the MIDI track
+    ///   - minimumZoom: the minimum zoom level for the MIDI track
+    ///   - maximumZoom: the maximum zoom level for the MIDI track
+    public init(noteRects: [CGRect],
+                length: CGFloat,
+                height: CGFloat,
+                playhead: Double,
+                zoomLevel: Double,
+                minimumZoom: Double,
+                maximumZoom: Double) {
+        self.noteRects = noteRects
         self.length = length
         self.height = height
-        self.playPos = playPos
+        self.playhead = playhead
         self.zoomLevel = zoomLevel
         self.minimumZoom = minimumZoom
         self.maximumZoom = maximumZoom
@@ -24,25 +39,23 @@ public struct MIDITrackViewModel {
         zoomLevel = max(min(newScale, maximumZoom), minimumZoom)
     }
     public mutating func zoomLevelGestureEnded() { lastZoomLevel = 1.0 }
-    public mutating func updatePlayPos(newPos: Double) { playPos = newPos }
+    public mutating func updatePlayPos(newPos: Double) { playhead = newPos }
+    /// Get the zoom level of all the tracks in the view
     public func getZoomLevel() -> Double { return zoomLevel }
+    /// Get the length of the longest track.
     public func getLength() -> CGFloat { return length }
+    /// Get the height of all the tracks in the view.
     public func getHeight() -> CGFloat { return height }
-    public func getPlayPos() -> Double { return playPos }
-    public func getMIDINotes() -> [CGRect] { return midiNotes }
-    /// The notes rendered in the view.
-    private let midiNotes: [CGRect]
-    /// The length of the longest track.
-    private let length: CGFloat
-    /// The height of all the tracks in the view.
-    private let height: CGFloat
     /// The view's current play position (also the position which the playhead displays)
-    private var playPos: Double
-    /// The zoom level of all the tracks in the view
+    public func getPlayhead() -> Double { return playhead }
+    /// Get the note rectangles rendered in the view.
+    public func getNoteRects() -> [CGRect] { return noteRects }
+    private let noteRects: [CGRect]
+    private let length: CGFloat
+    private let height: CGFloat
+    private var playhead: Double
     private var zoomLevel: Double
-    /// The minimum zoom level.
     private let minimumZoom: Double
-    /// The maximum zoom level.
     private let maximumZoom: Double
     private var lastZoomLevel: Double = 1.0
 }
