@@ -1,4 +1,4 @@
-# `MIDITrackView`
+# MIDITrackView
 
 A view representing a MIDI Track.
 
