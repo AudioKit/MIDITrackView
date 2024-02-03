@@ -25,10 +25,10 @@ struct MIDITrackViewDemo: View {
 
     init(conductor: Conductor) {
         self.conductor = conductor
-        self.arpModel = MIDITrackViewModel(noteRects: conductor.arpData.noteRects, length: conductor.arpData.length, height: conductor.arpData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
-        self.chordsModel = MIDITrackViewModel(noteRects: conductor.chordsData.noteRects, length: conductor.chordsData.length, height: conductor.chordsData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
-        self.bassModel = MIDITrackViewModel(noteRects: conductor.bassData.noteRects, length: conductor.bassData.length, height: conductor.bassData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
-        self.drumsModel = MIDITrackViewModel(noteRects: conductor.drumsData.noteRects, length: conductor.drumsData.length, height: conductor.drumsData.height, playPos: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.arpModel = MIDITrackViewModel(noteRects: conductor.arpData.noteRects, length: conductor.arpData.length, height: conductor.arpData.height, playhead: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.chordsModel = MIDITrackViewModel(noteRects: conductor.chordsData.noteRects, length: conductor.chordsData.length, height: conductor.chordsData.height, playhead: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.bassModel = MIDITrackViewModel(noteRects: conductor.bassData.noteRects, length: conductor.bassData.length, height: conductor.bassData.height, playhead: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
+        self.drumsModel = MIDITrackViewModel(noteRects: conductor.drumsData.noteRects, length: conductor.drumsData.length, height: conductor.drumsData.height, playhead: conductor.midiInstrument.currentPosition.beats, zoomLevel: 50.0, minimumZoom: 0.01, maximumZoom: 1000.0)
         self.isPlaying = false
         self.timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
     }

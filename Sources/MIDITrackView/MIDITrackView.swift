@@ -30,9 +30,9 @@ public struct MIDITrackView: View {
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10.0).fill(trackColor)
-            MIDINotesView(noteRects: model.getMIDINotes())
+            MIDINotesView(noteRects: model.getNoteRects())
             .transform(CGAffineTransformConcat(
-                CGAffineTransform(translationX: -model.getPlayPos(), y: 0.0), 
+                CGAffineTransform(translationX: -model.getPlayhead(), y: 0.0),
                 CGAffineTransform(scaleX: model.getZoomLevel(), y: 1.0))
             )
             .fill(noteColor)
