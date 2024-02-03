@@ -11,7 +11,7 @@ struct MIDITrackViewDemo: View {
         ],
         length: 500,
         height: 200,
-        playPos: 0.0,
+        playhead: 0.0,
         zoomLevel: 50.0,
         minimumZoom: 0.01,
         maximumZoom: 1000.0
