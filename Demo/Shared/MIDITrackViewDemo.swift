@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Combine
-import AudioKit
 import MIDITrackView
 
 extension Image {

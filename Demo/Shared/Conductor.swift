@@ -1,9 +1,7 @@
 // Copyright AudioKit. All Rights Reserved. Revision History at http://github.com/AudioKit/MIDITrackView/
-import SwiftUI
+
 import AudioKit
 import Foundation
-import MIDITrackView
-
 
 /// A class to manage audio playback within the view
 class Conductor {

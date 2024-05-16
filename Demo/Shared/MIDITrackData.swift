@@ -2,7 +2,6 @@
 
 import SwiftUI
 import AudioKit
-import MIDITrackView
 
 /// A class for holding the MIDINoteData to display in the MIDITrackView
 class MIDITrackData {
